@@ -1,3 +1,5 @@
+import bot.Bot;
+
 import javax.security.auth.login.LoginException;
 
 public class Main {
