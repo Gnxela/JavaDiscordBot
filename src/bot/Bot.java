@@ -24,11 +24,7 @@ public class Bot extends ListenerAdapter {
 	public void init() throws LoginException, InterruptedException {
 		PingCommand.setup(router);
 
-		JDABuilder builder = new JDABuilder(token);
-		builder.setBulkDeleteSplittingEnabled(true);
-		builder.addEventListeners(this);
-
-		jda = builder.build();
+		jda = new JDABuilder(token).addEventListeners(this).build();
 		jda.awaitReady();
 		System.out.printf("Logged into %d guilds\n", jda.getGuilds().size());
 	}
