@@ -1,8 +1,12 @@
 package bot.commands;
 
+import bot.AbstractPagedMessage;
 import bot.PagedMessage;
+import bot.PagedMessageEmbed;
 import bot.Router;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.UpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,6 +16,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 // TODO: Change this from a single command, to a generalised library that other commands can use.
@@ -31,30 +36,51 @@ public class TestPageCommand extends Command {
 
 	@Override
 	public void fire(MessageReceivedEvent message) {
-		message.getMessage().getChannel().sendMessage("TestPage").queue(response -> {
-			pageReactionListener.add(new PagedMessage(false, message.getAuthor(), response, Arrays.asList("Page 1.", "Page 2.", "Page 3.", "Page 4.")));
+		EmbedBuilder embedBuilder = new EmbedBuilder().setDescription("Help:");
+		message.getMessage().getChannel().sendMessage(embedBuilder.build()).queue(response -> {
+			MessageEmbed page1 = new EmbedBuilder().setDescription("Help:")
+					.addField("!help", "Displays this menu.", false)
+					.addField("!ping", "Pings the server.", false)
+					.addField("!page", "Creates a test message", false)
+					.build();
+			MessageEmbed page3 = new EmbedBuilder().setDescription("Help:")
+					.addField("!call", "Displays this menu.", false)
+					.addField("!tsdf", "Pings the server.", false)
+					.addField("!asd", "Creates a test message", false)
+					.build();
+			MessageEmbed page2 = new EmbedBuilder().setDescription("Help:")
+					.addField("!face", "Displays this menu.", false)
+					.addField("!231", "hop hip on.", false)
+					.addField("!asf", "Creates a test message", false)
+					.build();
+			List<MessageEmbed> embeds = Arrays.asList(page1, page2, page3);
+			pageReactionListener.add(new PagedMessageEmbed(true, message.getAuthor(), response, embeds));
 		});
+		message.getMessage().getChannel().sendMessage("Loading").queue(response -> {
+			pageReactionListener.add(new PagedMessage(true, message.getAuthor(), response, Arrays.asList("Page 1.", "Page 2.", "Page 3.")));
+		});
+
 	}
 
 	private static class PageReactionListener extends ListenerAdapter {
 
-		private CopyOnWriteArrayList<PagedMessage> pagedMessages;
+		private CopyOnWriteArrayList<AbstractPagedMessage> pagedMessages;
 
 		private PageReactionListener() {
 			this.pagedMessages = new CopyOnWriteArrayList<>();
 		}
 
-		public void add(PagedMessage pagedMessage) {
+		public void add(AbstractPagedMessage pagedMessage) {
 			pagedMessages.add(pagedMessage);
 			pagedMessage.init();
 		}
 
 		private void handleReact(String emoji, String messageId, User user) {
-			for (PagedMessage pagedMessage : pagedMessages) {
-				if (!pagedMessage.getMessage().getId().equals(messageId)) {
-					continue;
-				}
-				if (!pagedMessage.isPublic() && !pagedMessage.getAuthor().equals(user)) {
+			if (user.isBot()) {
+				return;
+			}
+			for (AbstractPagedMessage pagedMessage : pagedMessages) {
+				if (!pagedMessage.shouldUpdate(messageId, user)) {
 					continue;
 				}
 				if (pagedMessage.update(emoji)) {
@@ -66,7 +92,7 @@ public class TestPageCommand extends Command {
 
 		@Override
 		public void onGenericUpdate(@Nonnull UpdateEvent<?, ?> event) {
-			for (PagedMessage pagedMessage : pagedMessages) {
+			for (AbstractPagedMessage pagedMessage : pagedMessages) {
 				if (pagedMessage.isIdle()) {
 					pagedMessage.remove();
 					pagedMessages.remove(pagedMessage);
