@@ -4,14 +4,15 @@ import bot.PagedMessage;
 import bot.Router;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.UpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 // TODO: Change this from a single command, to a generalised library that other commands can use.
 public class TestPageCommand extends Command {
@@ -37,24 +38,18 @@ public class TestPageCommand extends Command {
 
 	private static class PageReactionListener extends ListenerAdapter {
 
-		private ArrayList<PagedMessage> pagedMessages;
+		private CopyOnWriteArrayList<PagedMessage> pagedMessages;
 
 		private PageReactionListener() {
-			this.pagedMessages = new ArrayList<>();
+			this.pagedMessages = new CopyOnWriteArrayList<>();
 		}
 
 		public void add(PagedMessage pagedMessage) {
 			pagedMessages.add(pagedMessage);
-			pagedMessage.getMessage().editMessage(pagedMessage.getPage()).queue();
-			pagedMessage.getMessage().addReaction(PagedMessage.ARROW_LEFT).queue();
-			pagedMessage.getMessage().addReaction(PagedMessage.ARROW_RIGHT).queue();
+			pagedMessage.init();
 		}
 
 		private void handleReact(String emoji, String messageId, User user) {
-			if (!emoji.equals(PagedMessage.ARROW_LEFT) && !emoji.equals(PagedMessage.ARROW_RIGHT)) {
-				return;
-			}
-
 			for (PagedMessage pagedMessage : pagedMessages) {
 				if (!pagedMessage.getMessage().getId().equals(messageId)) {
 					continue;
@@ -62,12 +57,20 @@ public class TestPageCommand extends Command {
 				if (!pagedMessage.isPublic() && !pagedMessage.getAuthor().equals(user)) {
 					continue;
 				}
-				if (emoji.equals(PagedMessage.ARROW_LEFT)) {
-					pagedMessage.previousPage();
-				} else {
-					pagedMessage.nextPage();
+				if (pagedMessage.update(emoji)) {
+					pagedMessage.remove();
+					pagedMessages.remove(pagedMessage);
 				}
-				pagedMessage.getMessage().editMessage(pagedMessage.getPage()).queue();
+			}
+		}
+
+		@Override
+		public void onGenericUpdate(@Nonnull UpdateEvent<?, ?> event) {
+			for (PagedMessage pagedMessage : pagedMessages) {
+				if (pagedMessage.isIdle()) {
+					pagedMessage.remove();
+					pagedMessages.remove(pagedMessage);
+				}
 			}
 		}
 
