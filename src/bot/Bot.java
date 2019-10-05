@@ -1,6 +1,7 @@
 package bot;
 
 import bot.commands.PingCommand;
+import bot.commands.TestPageCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -22,9 +23,12 @@ public class Bot extends ListenerAdapter {
 	}
 
 	public void init() throws LoginException, InterruptedException {
-		PingCommand.setup(router);
+		JDABuilder jdaBuilder = new JDABuilder(token).addEventListeners(this);
 
-		jda = new JDABuilder(token).addEventListeners(this).build();
+		PingCommand.setup(router);
+		TestPageCommand.setup(jdaBuilder, router);
+
+		jda = jdaBuilder.build();
 		jda.awaitReady();
 		System.out.printf("Logged into %d guilds\n", jda.getGuilds().size());
 	}
