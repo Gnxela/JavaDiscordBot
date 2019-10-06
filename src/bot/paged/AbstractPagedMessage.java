@@ -1,4 +1,4 @@
-package bot;
+package bot.paged;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;

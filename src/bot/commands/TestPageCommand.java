@@ -1,9 +1,10 @@
 package bot.commands;
 
-import bot.AbstractPagedMessage;
-import bot.PagedMessage;
-import bot.PagedMessageEmbed;
+import bot.paged.AbstractPagedMessage;
+import bot.paged.PagedMessage;
+import bot.paged.PagedMessageEmbed;
 import bot.Router;
+import bot.paged.PagedMessageManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -22,16 +23,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 // TODO: Change this from a single command, to a generalised library that other commands can use.
 public class TestPageCommand extends Command {
 
-	private PageReactionListener pageReactionListener;
+	private PagedMessageManager pageReactionListener;
 
-	private TestPageCommand(PageReactionListener pageReactionListener) {
+	private TestPageCommand(PagedMessageManager pageReactionListener) {
 		this.pageReactionListener = pageReactionListener;
 	}
 
-	public static void setup(JDABuilder jdaBuilder, Router router) {
-		PageReactionListener pageReactionListener = new PageReactionListener();
-		router.on("!page", new TestPageCommand(pageReactionListener));
-		jdaBuilder.addEventListeners(pageReactionListener);
+	public static void setup(PagedMessageManager pagedMessageManager, Router router) {
+		router.on("!page", new TestPageCommand(pagedMessageManager));
 	}
 
 	@Override
@@ -59,57 +58,5 @@ public class TestPageCommand extends Command {
 		message.getMessage().getChannel().sendMessage("Loading").queue(response -> {
 			pageReactionListener.add(new PagedMessage(true, message.getAuthor(), response, Arrays.asList("Page 1.", "Page 2.", "Page 3.")));
 		});
-
-	}
-
-	private static class PageReactionListener extends ListenerAdapter {
-
-		private CopyOnWriteArrayList<AbstractPagedMessage> pagedMessages;
-
-		private PageReactionListener() {
-			this.pagedMessages = new CopyOnWriteArrayList<>();
-		}
-
-		public void add(AbstractPagedMessage pagedMessage) {
-			pagedMessages.add(pagedMessage);
-			pagedMessage.init();
-		}
-
-		private void handleReact(String emoji, String messageId, User user) {
-			if (user.isBot()) {
-				return;
-			}
-			for (AbstractPagedMessage pagedMessage : pagedMessages) {
-				if (!pagedMessage.shouldUpdate(messageId, user)) {
-					continue;
-				}
-				if (pagedMessage.update(emoji)) {
-					pagedMessage.remove();
-					pagedMessages.remove(pagedMessage);
-				}
-			}
-		}
-
-		@Override
-		public void onGenericUpdate(@Nonnull UpdateEvent<?, ?> event) {
-			for (AbstractPagedMessage pagedMessage : pagedMessages) {
-				if (pagedMessage.isIdle()) {
-					pagedMessage.remove();
-					pagedMessages.remove(pagedMessage);
-				}
-			}
-		}
-
-		@Override
-		public void onMessageReactionRemove(@Nonnull MessageReactionRemoveEvent event) {
-			String emoji = event.getReaction().getReactionEmote().getEmoji();
-			handleReact(emoji, event.getMessageId(), event.getUser());
-		}
-
-		@Override
-		public void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-			String emoji = event.getReaction().getReactionEmote().getEmoji();
-			handleReact(emoji, event.getMessageId(), event.getUser());
-		}
 	}
 }

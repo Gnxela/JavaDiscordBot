@@ -2,6 +2,7 @@ package bot;
 
 import bot.commands.PingCommand;
 import bot.commands.TestPageCommand;
+import bot.paged.PagedMessageManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -16,17 +17,22 @@ public class Bot extends ListenerAdapter {
 	private String token;
 	private JDA jda;
 	private Router router;
+	private PagedMessageManager pagedMessageManager;
 
 	public Bot(String token) {
 		this.token = token;
 		this.router = new Router();
+		pagedMessageManager = new PagedMessageManager();
 	}
 
 	public void init() throws LoginException, InterruptedException {
 		JDABuilder jdaBuilder = new JDABuilder(token).addEventListeners(this);
 
+		jdaBuilder.addEventListeners(pagedMessageManager);
+
+		// TODO: Not happy with this. We should add a setup method to Command
 		PingCommand.setup(router);
-		TestPageCommand.setup(jdaBuilder, router);
+		TestPageCommand.setup(pagedMessageManager, router);
 
 		jda = jdaBuilder.build();
 		jda.awaitReady();
