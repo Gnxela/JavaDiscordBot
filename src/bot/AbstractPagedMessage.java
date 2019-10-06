@@ -27,10 +27,16 @@ public abstract class AbstractPagedMessage {
 		this.lastUpdate = System.currentTimeMillis();
 	}
 
-	public abstract void init();
 	public abstract int numPages();
 	/** Updates the page to {@code currentPage} */
 	public abstract void updatePage();
+
+	public void init() {
+		updatePage();
+		message.addReaction(PagedMessageEmbed.ARROW_LEFT).queue();
+		message.addReaction(PagedMessageEmbed.CANCEL).queue();
+		message.addReaction(PagedMessageEmbed.ARROW_RIGHT).queue();
+	}
 
 	/**
 	 * @return a boolean, indication whether the PagedMessage has been canceled or not (true=canceled).

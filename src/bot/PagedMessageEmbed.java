@@ -15,13 +15,6 @@ public class PagedMessageEmbed extends AbstractPagedMessage {
 		this.pages = pages;
 	}
 
-	public void init() {
-		updatePage();
-		message.addReaction(PagedMessageEmbed.ARROW_LEFT).queue();
-		message.addReaction(PagedMessageEmbed.CANCEL).queue();
-		message.addReaction(PagedMessageEmbed.ARROW_RIGHT).queue();
-	}
-
 	@Override
 	public void updatePage() {
 		message.editMessage(pages.get(currentPage)).queue();
