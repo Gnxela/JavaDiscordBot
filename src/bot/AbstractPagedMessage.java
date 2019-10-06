@@ -3,8 +3,6 @@ package bot;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
-import java.util.List;
-
 public abstract class AbstractPagedMessage {
 
 	public static final String ARROW_LEFT = "⬅";
@@ -28,7 +26,10 @@ public abstract class AbstractPagedMessage {
 	}
 
 	public abstract int numPages();
-	/** Updates the page to {@code currentPage} */
+
+	/**
+	 * Updates the page to {@code currentPage}
+	 */
 	public abstract void updatePage();
 
 	public void init() {
@@ -88,6 +89,7 @@ public abstract class AbstractPagedMessage {
 			currentPage = numPages() - 1;
 		}
 	}
+
 	public boolean isPublic() {
 		return isPublic;
 	}
