@@ -1,5 +1,6 @@
 package bot.commands;
 
+import bot.Bot;
 import bot.paged.AbstractPagedMessage;
 import bot.paged.PagedMessage;
 import bot.paged.PagedMessageEmbed;
@@ -23,14 +24,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 // TODO: Change this from a single command, to a generalised library that other commands can use.
 public class TestPageCommand extends Command {
 
-	private PagedMessageManager pageReactionListener;
-
-	private TestPageCommand(PagedMessageManager pageReactionListener) {
-		this.pageReactionListener = pageReactionListener;
-	}
-
-	public static void setup(PagedMessageManager pagedMessageManager, Router router) {
-		router.on("!page", new TestPageCommand(pagedMessageManager));
+	public TestPageCommand(Bot bot) {
+		super(bot);
+		bot.getRouter().on("!page", this);
 	}
 
 	@Override
@@ -53,10 +49,10 @@ public class TestPageCommand extends Command {
 					.addField("!asf", "Creates a test message", false)
 					.build();
 			List<MessageEmbed> embeds = Arrays.asList(page1, page2, page3);
-			pageReactionListener.add(new PagedMessageEmbed(true, message.getAuthor(), response, embeds));
+			bot.getPagedMessageManager().add(new PagedMessageEmbed(true, message.getAuthor(), response, embeds));
 		});
 		message.getMessage().getChannel().sendMessage("Loading").queue(response -> {
-			pageReactionListener.add(new PagedMessage(true, message.getAuthor(), response, Arrays.asList("Page 1.", "Page 2.", "Page 3.")));
+			bot.getPagedMessageManager().add(new PagedMessage(true, message.getAuthor(), response, Arrays.asList("Page 1.", "Page 2.", "Page 3.")));
 		});
 	}
 }

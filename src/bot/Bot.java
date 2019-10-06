@@ -1,5 +1,6 @@
 package bot;
 
+import bot.commands.Command;
 import bot.commands.PingCommand;
 import bot.commands.TestPageCommand;
 import bot.paged.PagedMessageManager;
@@ -11,8 +12,16 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class Bot extends ListenerAdapter {
+
+	@SuppressWarnings("unchecked")
+	private static final Class<? extends Command>[] commands = new Class[]{
+			PingCommand.class,
+			TestPageCommand.class
+	};
 
 	private String token;
 	private JDA jda;
@@ -30,13 +39,23 @@ public class Bot extends ListenerAdapter {
 
 		jdaBuilder.addEventListeners(pagedMessageManager);
 
-		// TODO: Not happy with this. We should add a setup method to Command
-		PingCommand.setup(router);
-		TestPageCommand.setup(pagedMessageManager, router);
+		loadCommands();
 
 		jda = jdaBuilder.build();
 		jda.awaitReady();
 		System.out.printf("Logged into %d guilds\n", jda.getGuilds().size());
+	}
+
+	private void loadCommands() {
+		for (Class<? extends Command> clazz : commands) {
+			try {
+				Constructor<? extends Command> constructor = clazz.getConstructor(Bot.class);
+				constructor.newInstance(this);
+				// The created instance automatically injects itself into the router. So nothing else to do here.
+			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -47,5 +66,13 @@ public class Bot extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
 		router.route(event.getMessage().getContentRaw(), event);
+	}
+
+	public Router getRouter() {
+		return router;
+	}
+
+	public PagedMessageManager getPagedMessageManager() {
+		return pagedMessageManager;
 	}
 }
