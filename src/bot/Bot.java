@@ -4,6 +4,7 @@ import bot.commands.Command;
 import bot.commands.PingCommand;
 import bot.commands.TestPageCommand;
 import bot.paged.PagedMessageManager;
+import bot.router.Router;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -65,7 +66,7 @@ public class Bot extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-		router.route(event.getMessage().getContentRaw(), event);
+		router.route(event);
 	}
 
 	public Router getRouter() {

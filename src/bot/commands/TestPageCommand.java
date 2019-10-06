@@ -1,32 +1,23 @@
 package bot.commands;
 
 import bot.Bot;
-import bot.paged.AbstractPagedMessage;
 import bot.paged.PagedMessage;
 import bot.paged.PagedMessageEmbed;
-import bot.Router;
-import bot.paged.PagedMessageManager;
+import bot.router.types.PrefixRoute;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.UpdateEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 // TODO: Change this from a single command, to a generalised library that other commands can use.
 public class TestPageCommand extends Command {
 
 	public TestPageCommand(Bot bot) {
 		super(bot);
-		bot.getRouter().on("!page", this);
+		bot.getRouter().on(new PrefixRoute(this, "!page"));
+
 	}
 
 	@Override

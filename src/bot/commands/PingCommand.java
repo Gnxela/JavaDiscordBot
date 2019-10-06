@@ -1,14 +1,14 @@
 package bot.commands;
 
 import bot.Bot;
-import bot.Router;
+import bot.router.types.PrefixRoute;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PingCommand extends Command {
 
 	public PingCommand(Bot bot) {
 		super(bot);
-		bot.getRouter().on("!ping", this);
+		bot.getRouter().on(new PrefixRoute(this, "!ping"));
 	}
 
 	@Override
