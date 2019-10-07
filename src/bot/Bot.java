@@ -3,6 +3,7 @@ package bot;
 import bot.commands.Command;
 import bot.commands.PingCommand;
 import bot.commands.TestPageCommand;
+import bot.exceptions.CommandException;
 import bot.paged.PagedMessageManager;
 import bot.router.Router;
 import net.dv8tion.jda.api.JDA;
@@ -66,7 +67,12 @@ public class Bot extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-		router.route(event);
+		try {
+			router.route(event);
+		} catch (CommandException e) {
+			// TODO: In future we don't want to leak error messages to Discord. But for development this is ok.
+			event.getChannel().sendMessage(event.getAuthor().getAsTag() + ": " + e.getMessage()).queue();
+		}
 	}
 
 	public Router getRouter() {

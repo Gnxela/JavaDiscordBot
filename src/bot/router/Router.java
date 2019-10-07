@@ -1,10 +1,9 @@
 package bot.router;
 
-import bot.commands.Command;
+import bot.exceptions.CommandException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Router {
 
@@ -21,7 +20,7 @@ public class Router {
 		routes.add(route);
 	}
 
-	public void route(MessageReceivedEvent message) {
+	public void route(MessageReceivedEvent message) throws CommandException {
 		for (Route route : routes) {
 			if (route.isRoute(message.getMessage().getContentRaw())) {
 				route.route(message);

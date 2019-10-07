@@ -2,7 +2,6 @@ package bot.router.types;
 
 import bot.commands.Command;
 import bot.router.Route;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class PrefixRoute extends Route {
 
