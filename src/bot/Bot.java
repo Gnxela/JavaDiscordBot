@@ -2,6 +2,7 @@ package bot;
 
 import bot.commands.Command;
 import bot.commands.PingCommand;
+import bot.commands.TestMultiCommand;
 import bot.commands.TestPageCommand;
 import bot.exceptions.CommandException;
 import bot.paged.PagedMessageManager;
@@ -22,7 +23,8 @@ public class Bot extends ListenerAdapter {
 	@SuppressWarnings("unchecked")
 	private static final Class<? extends Command>[] commands = new Class[]{
 			PingCommand.class,
-			TestPageCommand.class
+			TestPageCommand.class,
+			TestMultiCommand.class
 	};
 
 	private String token;

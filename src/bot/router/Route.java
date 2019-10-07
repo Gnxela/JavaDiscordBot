@@ -17,5 +17,4 @@ public abstract class Route {
 	public void route(MessageReceivedEvent event) throws CommandException {
 		command.fire(event);
 	}
-
 }
