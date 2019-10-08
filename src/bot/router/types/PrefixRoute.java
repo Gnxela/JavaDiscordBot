@@ -11,7 +11,7 @@ public class PrefixRoute extends Route {
 	public PrefixRoute(Command command, boolean caseSensitive, String prefix) {
 		super(command);
 		this.caseSensitive = caseSensitive;
-		this.prefix = prefix;
+		this.prefix = caseSensitive ? prefix : prefix.toLowerCase();
 	}
 
 	public PrefixRoute(Command command, String prefix) {
@@ -20,7 +20,6 @@ public class PrefixRoute extends Route {
 
 	@Override
 	public boolean isRoute(String input) {
-		// TODO: No need to lower case every time. Just store it
-		return caseSensitive ? input.startsWith(prefix) : input.toLowerCase().startsWith(prefix.toLowerCase());
+		return caseSensitive ? input.startsWith(prefix) : input.toLowerCase().startsWith(prefix);
 	}
 }

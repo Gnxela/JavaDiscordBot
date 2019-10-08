@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.Arrays;
 import java.util.List;
 
-// TODO: Change this from a single command, to a generalised library that other commands can use.
 public class TestPageCommand extends Command {
 
 	public TestPageCommand(Bot bot) {

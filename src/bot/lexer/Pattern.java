@@ -19,7 +19,6 @@ public class Pattern {
 		PatternOutput.Builder outputBuilder = new PatternOutput.Builder();
 		int index = 0;
 		for (Token token : pattern) {
-			// TODO: We need to make sure there's whitespace between every section, and we need to trim the whitespace.
 			int newIndex = token.parse(input, index, outputBuilder);
 			if (newIndex < index) {
 				return null;
