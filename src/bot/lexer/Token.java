@@ -12,9 +12,10 @@ public abstract class Token {
 	 *
 	 * @param s     The string to be parsed.
 	 * @param index The index to parse from.
+	 * @param outputBuilder A builder that must be added to when parsing content (everything but whitespace)
 	 * @return The new index to continue parsing from.
 	 */
-	public abstract int parse(String s, PatternOutput.Builder outputBuilder, int index);
+	public abstract int parse(String s, int index, PatternOutput.Builder outputBuilder);
 
 	public int getStart() {
 		return start;

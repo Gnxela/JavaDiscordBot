@@ -1,11 +1,12 @@
 package bot.lexer;
 
+import bot.lexer.tokens.ConstantToken;
+import bot.lexer.tokens.WhitespaceToken;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class Pattern {
-
-	private static final char[] WHITESPACE_CHARS = new char[]{' ', '\t'};
 
 	private Token[] pattern;
 
@@ -19,14 +20,24 @@ public class Pattern {
 		int index = 0;
 		for (Token token : pattern) {
 			// TODO: We need to make sure there's whitespace between every section, and we need to trim the whitespace.
-			int newIndex = token.parse(input, outputBuilder, index);
-			if (newIndex >= index) {
-				index = newIndex;
-			} else {
+			int newIndex = token.parse(input, index, outputBuilder);
+			if (newIndex < index) {
 				return null;
 			}
+			index = newIndex;
 		}
 		return outputBuilder.build();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("<Pattern ");
+		for (Token token : pattern) {
+			sb.append(token.toString());
+			sb.append(" ");
+		}
+		sb.append(">");
+		return sb.toString();
 	}
 
 	public static class Builder {
@@ -39,6 +50,27 @@ public class Pattern {
 
 		public Builder addConstant(String constant) {
 			tokens.add(new ConstantToken(constant));
+			return this;
+		}
+
+		public Builder addWhitespace() {
+			tokens.add(new WhitespaceToken());
+			return this;
+		}
+
+		// x w x w x
+
+		/**
+		 * Adds whitespace tokens between all currently added tokens.
+		 */
+		public Builder addWhitespaceRetro() {
+			int size = tokens.size();
+			if (size <= 1) {
+				return this;
+			}
+			for (int i = 0; i < size - 1; i++) {
+				tokens.add(1 + i * 2, new WhitespaceToken());
+			}
 			return this;
 		}
 

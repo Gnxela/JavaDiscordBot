@@ -24,6 +24,17 @@ public class Lexer {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("<Lexer ");
+		for (Pattern pattern : patterns) {
+			sb.append(pattern.toString());
+			sb.append(" ");
+		}
+		sb.append(">");
+		return sb.toString();
+	}
+
 	public static class Builder {
 
 		private ArrayList<Pattern> patterns;

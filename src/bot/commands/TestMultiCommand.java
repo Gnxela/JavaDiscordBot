@@ -13,10 +13,11 @@ public class TestMultiCommand extends MultiCommand {
 	public TestMultiCommand(Bot bot) {
 		super(bot);
 		Lexer lexer = new Lexer.Builder()
-				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addConstant("2"))
-				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1"))
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addConstant("2").addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!mc"))
 				.build();
+		System.out.println(lexer);
 		bot.getRouter().on(new LexerRoute(this, lexer));
 	}
 
@@ -24,7 +25,7 @@ public class TestMultiCommand extends MultiCommand {
 	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException {
 		switch (output.getId()) {
 			case 0:
-				System.out.println("Subcommand 1: " + output.getId() + " " + output.output[0]);
+				System.out.println("Subcommand 1");
 				break;
 			case 1:
 				System.out.println("Subcommand 2");
