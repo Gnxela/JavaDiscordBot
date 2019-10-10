@@ -32,9 +32,11 @@ public class RollCommand extends MultiCommand {
 				} else {
 					// Fallthrough
 				}
-			default:
+			case 1:
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " invalid arguments.").queue();
 				break;
+			default:
+				throw new CommandException("Unknown subcommand ID.");
 		}
 	}
 }
