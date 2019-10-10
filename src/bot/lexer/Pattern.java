@@ -1,9 +1,6 @@
 package bot.lexer;
 
-import bot.lexer.tokens.ConstantToken;
-import bot.lexer.tokens.IntToken;
-import bot.lexer.tokens.StringToken;
-import bot.lexer.tokens.WhitespaceToken;
+import bot.lexer.tokens.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -56,6 +53,11 @@ public class Pattern {
 
 		public Builder addInt() {
 			tokens.add(new IntToken());
+			return this;
+		}
+
+		public Builder addFloat() {
+			tokens.add(new FloatToken());
 			return this;
 		}
 

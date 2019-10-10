@@ -13,9 +13,9 @@ public class TestMultiCommand extends MultiCommand {
 	public TestMultiCommand(Bot bot) {
 		super(bot);
 		Lexer lexer = new Lexer.Builder()
-				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addString().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addFloat().addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addInt().addWhitespaceRetro())
-				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("2").addInt().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addString().addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!mc"))
 				.build();
 		bot.getRouter().on(new LexerRoute(this, lexer));
@@ -26,7 +26,7 @@ public class TestMultiCommand extends MultiCommand {
 		switch (output.getId()) {
 			case 0:
 				System.out.println("Subcommand 1");
-				System.out.println(output.getString(2));
+				System.out.println(output.getFloat(2));
 				break;
 			case 1:
 				System.out.println("Subcommand 2");
@@ -34,7 +34,7 @@ public class TestMultiCommand extends MultiCommand {
 				break;
 			case 2:
 				System.out.println("Subcommand 3");
-				System.out.println(output.getInt(2));
+				System.out.println(output.getString(2));
 				break;
 			case 3:
 				System.out.println("Subcommand 4");

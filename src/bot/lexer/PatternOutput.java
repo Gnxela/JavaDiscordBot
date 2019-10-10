@@ -18,6 +18,10 @@ public class PatternOutput {
 		return (Integer) output[i];
 	}
 
+	public Float getFloat(int i) {
+		return (Float) output[i];
+	}
+
 	public String getString(int i) {
 		return (String) output[i];
 	}
@@ -46,6 +50,10 @@ public class PatternOutput {
 
 		public Builder addInt(Integer i) {
 			return add(i);
+		}
+
+		public Builder addFloat(Float f) {
+			return add(f);
 		}
 
 		public Builder addString(String s) {
