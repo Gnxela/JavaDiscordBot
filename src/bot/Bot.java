@@ -1,9 +1,6 @@
 package bot;
 
-import bot.commands.Command;
-import bot.commands.PingCommand;
-import bot.commands.TestMultiCommand;
-import bot.commands.TestPageCommand;
+import bot.commands.*;
 import bot.exceptions.CommandException;
 import bot.paged.PagedMessageManager;
 import bot.router.Router;
@@ -17,15 +14,19 @@ import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 
 public class Bot extends ListenerAdapter {
 
 	@SuppressWarnings("unchecked")
 	private static final Class<? extends Command>[] commands = new Class[]{
 			PingCommand.class,
+			RollCommand.class,
 			TestPageCommand.class,
 			TestMultiCommand.class
 	};
+
+	public static final Random RANDOM = new Random(System.currentTimeMillis());
 
 	private String token;
 	private JDA jda;
@@ -73,7 +74,7 @@ public class Bot extends ListenerAdapter {
 			router.route(event);
 		} catch (CommandException e) {
 			// TODO: In future we don't want to leak error messages to Discord. But for development this is ok.
-			event.getChannel().sendMessage(event.getAuthor().getAsTag() + ": " + e.getMessage()).queue();
+			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": " + e.getMessage()).queue();
 		}
 	}
 
