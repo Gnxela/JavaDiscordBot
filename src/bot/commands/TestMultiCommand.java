@@ -13,8 +13,9 @@ public class TestMultiCommand extends MultiCommand {
 	public TestMultiCommand(Bot bot) {
 		super(bot);
 		Lexer lexer = new Lexer.Builder()
-				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addConstant("2").addWhitespaceRetro())
-				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addInt().addInt().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addInt().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("2").addInt().addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!mc"))
 				.build();
 		System.out.println(lexer);
@@ -26,12 +27,19 @@ public class TestMultiCommand extends MultiCommand {
 		switch (output.getId()) {
 			case 0:
 				System.out.println("Subcommand 1");
+				System.out.println(output.getInt(2));
+				System.out.println(output.getInt(3));
 				break;
 			case 1:
 				System.out.println("Subcommand 2");
+				System.out.println(output.getInt(2));
 				break;
 			case 2:
 				System.out.println("Subcommand 3");
+				System.out.println(output.getInt(2));
+				break;
+			case 3:
+				System.out.println("Subcommand 4");
 				break;
 			default:
 				throw new CommandException("Unknown subcommand ID.");

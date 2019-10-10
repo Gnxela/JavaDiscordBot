@@ -14,6 +14,14 @@ public class PatternOutput {
 		this.output = output;
 	}
 
+	public Integer getInt(int i) {
+		return (Integer) output[i];
+	}
+
+	public String getString(int i) {
+		return (String) output[i];
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -31,9 +39,17 @@ public class PatternOutput {
 			this.id = id;
 		}
 
-		public Builder add(Object o) {
+		private Builder add(Object o) {
 			output.add(o);
 			return this;
+		}
+
+		public Builder addInt(Integer i) {
+			return add(i);
+		}
+
+		public Builder addString(String s) {
+			return add(s);
 		}
 
 		public PatternOutput build() throws BuilderException {

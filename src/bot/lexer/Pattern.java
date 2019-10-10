@@ -1,6 +1,7 @@
 package bot.lexer;
 
 import bot.lexer.tokens.ConstantToken;
+import bot.lexer.tokens.IntToken;
 import bot.lexer.tokens.WhitespaceToken;
 
 import javax.annotation.Nullable;
@@ -49,6 +50,11 @@ public class Pattern {
 
 		public Builder addConstant(String constant) {
 			tokens.add(new ConstantToken(constant));
+			return this;
+		}
+
+		public Builder addInt() {
+			tokens.add(new IntToken());
 			return this;
 		}
 
