@@ -9,11 +9,20 @@ public class IntToken extends Token {
 
 	@Override
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
+		boolean negative = false;
+		if (s.charAt(index) == '-') {
+			index++; // Skip the negation.
+			negative = true;
+		}
 		int trimmedIndex = Strings.skipChars(index, s, Strings.NUMBER_CHARS);
 		if (trimmedIndex == index) {
 			return -1;
 		}
-		outputBuilder.addInt(Integer.parseInt(s.substring(index, trimmedIndex)));
+		Integer i = Integer.parseInt(s.substring(index, trimmedIndex));
+		if (negative) {
+			i *= -1;
+		}
+		outputBuilder.addInt(i);
 		return trimmedIndex;
 	}
 
