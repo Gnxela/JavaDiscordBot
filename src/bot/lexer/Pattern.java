@@ -15,7 +15,7 @@ public class Pattern {
 	}
 
 	@Nullable
-	PatternOutput parse(String input) {
+	PatternOutput.Builder parse(String input) {
 		PatternOutput.Builder outputBuilder = new PatternOutput.Builder();
 		int index = 0;
 		for (Token token : pattern) {
@@ -25,7 +25,7 @@ public class Pattern {
 			}
 			index = newIndex;
 		}
-		return outputBuilder.build();
+		return outputBuilder;
 	}
 
 	@Override

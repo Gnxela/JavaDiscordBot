@@ -15,7 +15,6 @@ public class WhitespaceToken extends Token {
 	@Override
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
 		int trimmedIndex = Strings.skipChars(index, s, WHITESPACE_CHARS);
-		System.out.println(index + ":" + trimmedIndex);
 		if (trimmedIndex == index) {
 			return -1;
 		}

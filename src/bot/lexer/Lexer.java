@@ -1,5 +1,7 @@
 package bot.lexer;
 
+import bot.exceptions.BuilderException;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
@@ -15,10 +17,15 @@ public class Lexer {
 	public PatternOutput parse(String input) {
 		for (int i = 0; i < patterns.length; i++) {
 			Pattern p = patterns[i];
-			@Nullable PatternOutput output = p.parse(input);
-			if (output != null) {
-				output.setId(i);
-				return output;
+			@Nullable PatternOutput.Builder outputBuilder = p.parse(input);
+			if (outputBuilder != null) {
+				outputBuilder.setId(i);
+				try {
+					return outputBuilder.build();
+				} catch (BuilderException e) {
+					e.printStackTrace();
+				}
+				return null;
 			}
 		}
 		return null;
