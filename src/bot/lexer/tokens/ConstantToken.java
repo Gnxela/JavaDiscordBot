@@ -13,7 +13,7 @@ public class ConstantToken extends Token {
 
 	@Override
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
-		if (s.substring(index).startsWith(constant)) {
+		if (s.startsWith(constant, index)) {
 			outputBuilder.add(constant);
 			return index + constant.length();
 		}
