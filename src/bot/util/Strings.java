@@ -7,14 +7,12 @@ public class Strings {
 
 
 	public static int skipChars(int index, String input, char[] trimmings) {
-		if (index == input.length()) {
-			return index;
-		}
-		char c = input.charAt(index);
-		for (char trimming : trimmings) {
-			if (c == trimming) {
-				return skipChars(index + 1, input, trimmings);
+		while (index < input.length()) {
+			char c = input.charAt(index);
+			if (!charsContain(c, trimmings)) {
+				return index;
 			}
+			index++;
 		}
 		return index;
 	}
@@ -22,16 +20,41 @@ public class Strings {
 	/**
 	 * Skips all characters until a char in chars is met.
 	 */
-	public static int skipUntil(int index, String input, char[] chars) {
-		if (index == input.length()) {
-			return index;
-		}
-		char c = input.charAt(index);
-		for (char stopper : chars) {
-			if (c == stopper) {
+	public static int skipUntil(int index, String input, char[] stoppers) {
+		while (index < input.length()) {
+			char c = input.charAt(index);
+			if (charsContain(c, stoppers)) {
 				return index;
 			}
+			index++;
 		}
-		return skipUntil(index + 1, input, chars);
+		return index;
+	}
+
+	/**
+	 * Skips all characters in trimmings until a char in stoppers is met.
+	 * If a character in neither array is met, -1 is returned.
+	 */
+	public static int skipCharsUntil(int index, String input, char[] trimmings, char[] stoppers) {
+		while (index < input.length()) {
+			char c = input.charAt(index);
+			if (!charsContain(c, trimmings)) {
+				if (charsContain(c, stoppers)) {
+					return index;
+				}
+				return -1;
+			}
+			index++;
+		}
+		return index;
+	}
+
+	private static boolean charsContain(char c, char[] array) {
+		for (char ch : array) {
+			if (c == ch) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
