@@ -2,6 +2,7 @@ package bot.lexer;
 
 import bot.lexer.tokens.ConstantToken;
 import bot.lexer.tokens.IntToken;
+import bot.lexer.tokens.StringToken;
 import bot.lexer.tokens.WhitespaceToken;
 
 import javax.annotation.Nullable;
@@ -58,12 +59,15 @@ public class Pattern {
 			return this;
 		}
 
+		public Builder addString() {
+			tokens.add(new StringToken());
+			return this;
+		}
+
 		public Builder addWhitespace() {
 			tokens.add(new WhitespaceToken());
 			return this;
 		}
-
-		// x w x w x
 
 		/**
 		 * Adds whitespace tokens between all currently added tokens.

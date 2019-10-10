@@ -18,4 +18,20 @@ public class Strings {
 		}
 		return index;
 	}
+
+	/**
+	 * Skips all characters until a char in chars is met.
+	 */
+	public static int skipUntil(int index, String input, char[] chars) {
+		if (index == input.length()) {
+			return index;
+		}
+		char c = input.charAt(index);
+		for (char stopper : chars) {
+			if (c == stopper) {
+				return index;
+			}
+		}
+		return skipUntil(index + 1, input, chars);
+	}
 }
