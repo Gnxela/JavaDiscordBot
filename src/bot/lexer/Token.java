@@ -32,4 +32,7 @@ public abstract class Token {
 	public void setEnd(int end) {
 		this.end = end;
 	}
+
+	@Override
+	public abstract String toString();
 }
