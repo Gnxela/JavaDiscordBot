@@ -29,7 +29,6 @@ public class Bot extends ListenerAdapter {
 	};
 
 	private String token;
-	private JDA jda;
 	private Router router;
 	private PagedMessageManager pagedMessageManager;
 
@@ -46,7 +45,7 @@ public class Bot extends ListenerAdapter {
 
 		loadCommands();
 
-		jda = jdaBuilder.build();
+		JDA jda = jdaBuilder.build();
 		jda.awaitReady();
 		System.out.printf("Logged into %d guilds\n", jda.getGuilds().size());
 	}
