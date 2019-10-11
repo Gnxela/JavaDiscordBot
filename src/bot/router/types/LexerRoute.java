@@ -1,6 +1,5 @@
 package bot.router.types;
 
-import bot.commands.Command;
 import bot.commands.MultiCommand;
 import bot.exceptions.CommandException;
 import bot.lexer.Lexer;

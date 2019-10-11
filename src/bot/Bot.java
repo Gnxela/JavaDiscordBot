@@ -18,6 +18,8 @@ import java.util.Random;
 
 public class Bot extends ListenerAdapter {
 
+	public static final Random RANDOM = new Random(System.currentTimeMillis());
+
 	@SuppressWarnings("unchecked")
 	private static final Class<? extends Command>[] commands = new Class[]{
 			PingCommand.class,
@@ -25,8 +27,6 @@ public class Bot extends ListenerAdapter {
 			TestPageCommand.class,
 			TestMultiCommand.class
 	};
-
-	public static final Random RANDOM = new Random(System.currentTimeMillis());
 
 	private String token;
 	private JDA jda;

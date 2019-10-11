@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class PatternOutput {
 
-	private int id;
 	public Object[] output;
+	private int id;
 
 	PatternOutput(int id, Object[] output) {
 		this.id = id;
