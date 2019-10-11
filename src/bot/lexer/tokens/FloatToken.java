@@ -16,7 +16,7 @@ public class FloatToken extends Token {
 			negative = true;
 		}
 		int trimmedIndex = Strings.skipCharsUntil(index, s, Strings.NUMBER_CHARS, DECIMAL_CHARS);
-		if (trimmedIndex == -1 || trimmedIndex == index) {
+		if (trimmedIndex <= index) {
 			return -1;
 		}
 		trimmedIndex++;

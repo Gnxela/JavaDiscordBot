@@ -18,7 +18,7 @@ public class Strings {
 	}
 
 	/**
-	 * Skips all characters until a char in chars is met.
+	 * Skips all characters until a char in stoppers is met.
 	 */
 	public static int skipUntil(int index, String input, char[] stoppers) {
 		while (index < input.length()) {
@@ -33,7 +33,7 @@ public class Strings {
 
 	/**
 	 * Skips all characters in trimmings until a char in stoppers is met.
-	 * If a character in neither array is met, -1 is returned.
+	 * If a character in neither array is met -1 is returned.
 	 */
 	public static int skipCharsUntil(int index, String input, char[] trimmings, char[] stoppers) {
 		while (index < input.length()) {
