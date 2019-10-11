@@ -13,6 +13,9 @@ public class Lexer {
 		this.patterns = patterns;
 	}
 
+	// TODO: Lexer should convert the array of patterns to a tree, so if multiple patterns start with the same token it will only need to be computed once.
+	// This will require all Tokens to have an equals() method.
+
 	@Nullable
 	public PatternOutput parse(String input) {
 		for (int i = 0; i < patterns.length; i++) {

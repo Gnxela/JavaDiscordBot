@@ -14,8 +14,6 @@ public class Router {
 		this.routes = new ArrayList<>();
 	}
 
-	// TODO: Is once() needed?
-
 	public void on(Route route) {
 		routes.add(route);
 	}
