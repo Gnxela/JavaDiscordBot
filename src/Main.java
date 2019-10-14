@@ -5,7 +5,10 @@ import javax.security.auth.login.LoginException;
 public class Main {
 
 	public static void main(String[] args) throws LoginException, InterruptedException {
-		new Bot("NjI3MTIxNjEyMTMwNjE1Mjk2.XY4CwA.nd5MFKGE6_SV2Mkb8Or40TQ5s3M").init();
+		if (args.length < 1) {
+			throw new LoginException("Token not provided.");
+		}
+		new Bot(args[0]).init();
 	}
 
 }
