@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
@@ -19,6 +20,7 @@ import java.util.Random;
 public class Bot extends ListenerAdapter {
 
 	public static final Random RANDOM = new Random(System.currentTimeMillis());
+	public static final String CONFIG_FOLDER = "config";
 
 	@SuppressWarnings("unchecked")
 	private static final Class<? extends Command>[] commands = new Class[]{
@@ -40,8 +42,9 @@ public class Bot extends ListenerAdapter {
 
 	public void init() throws LoginException, InterruptedException {
 		JDABuilder jdaBuilder = new JDABuilder(token).addEventListeners(this);
-
 		jdaBuilder.addEventListeners(pagedMessageManager);
+
+		new File(CONFIG_FOLDER).mkdir();
 
 		loadCommands();
 
