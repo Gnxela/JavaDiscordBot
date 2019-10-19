@@ -52,7 +52,8 @@ public class AliasCommand extends MultiCommand {
 					template.setDescription("");
 					MessageEmbed.Field[] fields = aliases.entrySet().stream().map(Streams::entryToFieldInline).toArray(MessageEmbed.Field[]::new);
 					List<MessageEmbed> pages = PagedMessageEmbed.fieldsToEmbeds(template, 5, fields);
-					PagedMessageEmbed pagedMessage = new PagedMessageEmbed(false, message.getAuthor(), response, pages);
+					List<MessageEmbed> pagesWithIndex = PagedMessageEmbed.embedsAddIndex(pages);
+					PagedMessageEmbed pagedMessage = new PagedMessageEmbed(false, message.getAuthor(), response, pagesWithIndex);
 					bot.getPagedMessageManager().add(pagedMessage);
 				});
 				break;

@@ -31,6 +31,15 @@ public class PagedMessageEmbed extends AbstractPagedMessage {
 		return embeds;
 	}
 
+
+	public static List<MessageEmbed> embedsAddIndex(List<MessageEmbed> embeds) {
+		List<MessageEmbed> newEmbeds = new ArrayList<>();
+		for (int i = 0; i < embeds.size(); i++) {
+			newEmbeds.add(new EmbedBuilder(embeds.get(i)).setFooter((i + 1) + "/" + embeds.size()).build());
+		}
+		return newEmbeds;
+	}
+
 	@Override
 	public void updatePage() {
 		message.editMessage(pages.get(currentPage)).queue();
