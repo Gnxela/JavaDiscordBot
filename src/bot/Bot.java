@@ -26,6 +26,7 @@ public class Bot extends ListenerAdapter {
 	private static final Class<? extends Command>[] commands = new Class[]{
 			PingCommand.class,
 			RollCommand.class,
+			AliasCommand.class,
 			TestPageCommand.class,
 			TestMultiCommand.class
 	};
