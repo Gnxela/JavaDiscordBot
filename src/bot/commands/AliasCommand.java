@@ -20,6 +20,8 @@ public class AliasCommand extends MultiCommand {
 
 	private static final JSONObject DEFAULT_CONFIG = new JSONObject("{aliases:{}}");
 
+	// TODO: The way we're currently doing configs assumes that the bot will only ever be on one server.
+	// This should be changed.
 	private JSONObject config;
 	private JSONObject aliases;
 	private LexerRoute currentRoute;
