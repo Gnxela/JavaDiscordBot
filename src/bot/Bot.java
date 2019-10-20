@@ -73,6 +73,9 @@ public class Bot extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
+		if (event.getAuthor().isBot()) {
+			return;
+		}
 		try {
 			router.route(event.getMessage().getContentRaw(), event);
 		} catch (CommandException e) {
