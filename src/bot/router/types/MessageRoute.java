@@ -13,9 +13,9 @@ public abstract class MessageRoute implements Route<String, MessageReceivedEvent
 		this.command = command;
 	}
 
-	public abstract boolean isRoute(String input);
+	public abstract boolean isRoute(String identifier);
 
-	public void route(MessageReceivedEvent event) throws CommandException {
+	public void route(String identifier, MessageReceivedEvent event) throws CommandException {
 		command.fire(event);
 	}
 

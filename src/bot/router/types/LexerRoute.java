@@ -19,13 +19,13 @@ public class LexerRoute extends MessageRoute {
 	}
 
 	@Override
-	public boolean isRoute(String input) {
-		return lexer.parse(input) != null;
+	public boolean isRoute(String identifier) {
+		return lexer.parse(identifier) != null;
 	}
 
 	@Override
-	public void route(MessageReceivedEvent event) throws CommandException {
-		PatternOutput output = lexer.parse(event.getMessage().getContentRaw());
+	public void route(String identifier, MessageReceivedEvent event) throws CommandException {
+		PatternOutput output = lexer.parse(identifier);
 		multiCommand.fire(output, event);
 	}
 }

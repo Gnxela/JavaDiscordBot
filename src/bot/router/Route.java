@@ -4,7 +4,7 @@ import bot.exceptions.CommandException;
 
 public interface Route<T, E> {
 
-	boolean isRoute(T input);
+	boolean isRoute(T identifier);
 
-	void route(E event) throws CommandException;
+	void route(T identifier, E event) throws CommandException;
 }

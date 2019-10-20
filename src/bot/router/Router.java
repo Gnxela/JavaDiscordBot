@@ -27,7 +27,7 @@ public class Router<T, E> {
 	public void route(T identifier, E payload) throws CommandException {
 		for (Route<T, E> route : routes) {
 			if (route.isRoute(identifier)) {
-				route.route(payload);
+				route.route(identifier, payload);
 			}
 		}
 	}

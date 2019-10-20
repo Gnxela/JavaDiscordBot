@@ -19,7 +19,7 @@ public class PrefixRoute extends MessageRoute {
 	}
 
 	@Override
-	public boolean isRoute(String input) {
-		return caseSensitive ? input.startsWith(prefix) : input.toLowerCase().startsWith(prefix);
+	public boolean isRoute(String identifier) {
+		return caseSensitive ? identifier.startsWith(prefix) : identifier.toLowerCase().startsWith(prefix);
 	}
 }
