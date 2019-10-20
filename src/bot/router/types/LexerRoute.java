@@ -7,7 +7,7 @@ import bot.lexer.PatternOutput;
 import bot.router.Route;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class LexerRoute extends Route {
+public class LexerRoute extends MessageRoute {
 
 	private Lexer lexer;
 	private MultiCommand multiCommand;

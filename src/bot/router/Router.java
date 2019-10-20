@@ -4,24 +4,30 @@ import bot.exceptions.CommandException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Router {
+public class Router<T, E> {
 
-
-	private ArrayList<Route> routes;
+	private List<Route<T, E>> routes;
 
 	public Router() {
-		this.routes = new ArrayList<>();
+		this.routes = new CopyOnWriteArrayList<>();
 	}
 
-	public void on(Route route) {
+	public void addRoute(Route<T, E> route) {
 		routes.add(route);
 	}
 
-	public void route(MessageReceivedEvent message) throws CommandException {
-		for (Route route : routes) {
-			if (route.isRoute(message.getMessage().getContentRaw())) {
-				route.route(message);
+	public void removeRoute(Route<T, E> route) {
+		routes.remove(route);
+	}
+
+	public void route(T identifier, E payload) throws CommandException {
+		for (Route<T, E> route : routes) {
+			if (route.isRoute(identifier)) {
+				route.route(payload);
 			}
 		}
 	}

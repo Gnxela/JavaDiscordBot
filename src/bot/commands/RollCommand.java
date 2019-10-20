@@ -16,7 +16,7 @@ public class RollCommand extends MultiCommand {
 				.addPattern(new Pattern.Builder().addConstant("!roll").addInt().addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!roll").addWhitespaceRetro())
 				.build();
-		bot.getRouter().on(new LexerRoute(this, lexer));
+		bot.getRouter().addRoute(new LexerRoute(this, lexer));
 	}
 
 	@Override

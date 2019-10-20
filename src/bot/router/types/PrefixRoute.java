@@ -3,7 +3,7 @@ package bot.router.types;
 import bot.commands.Command;
 import bot.router.Route;
 
-public class PrefixRoute extends Route {
+public class PrefixRoute extends MessageRoute {
 
 	private String prefix;
 	private boolean caseSensitive;

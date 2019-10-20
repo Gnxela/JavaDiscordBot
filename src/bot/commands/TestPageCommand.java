@@ -15,7 +15,7 @@ public class TestPageCommand extends Command {
 
 	public TestPageCommand(Bot bot) {
 		super(bot);
-		bot.getRouter().on(new PrefixRoute(this, "!page"));
+		bot.getRouter().addRoute(new PrefixRoute(this, "!page"));
 
 	}
 
@@ -35,7 +35,7 @@ public class TestPageCommand extends Command {
 					.build();
 			MessageEmbed page2 = new EmbedBuilder().setDescription("Help:")
 					.addField("!face", "Displays this menu.", false)
-					.addField("!231", "hop hip on.", false)
+					.addField("!231", "hop hip addRoute.", false)
 					.addField("!asf", "Creates a test message", false)
 					.build();
 			List<MessageEmbed> embeds = Arrays.asList(page1, page2, page3);

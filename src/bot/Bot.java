@@ -32,12 +32,12 @@ public class Bot extends ListenerAdapter {
 	};
 
 	private String token;
-	private Router router;
+	private Router<String, MessageReceivedEvent> router;
 	private PagedMessageManager pagedMessageManager;
 
 	public Bot(String token) {
 		this.token = token;
-		this.router = new Router();
+		this.router = new Router<>();
 		pagedMessageManager = new PagedMessageManager();
 	}
 
@@ -74,14 +74,14 @@ public class Bot extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
 		try {
-			router.route(event);
+			router.route(event.getMessage().getContentRaw(), event);
 		} catch (CommandException e) {
 			// TODO: In future we don't want to leak error messages to Discord. But for development this is ok.
 			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": " + e.getMessage()).queue();
 		}
 	}
 
-	public Router getRouter() {
+	public Router<String, MessageReceivedEvent> getRouter() {
 		return router;
 	}
 

@@ -1,20 +1,10 @@
 package bot.router;
 
-import bot.commands.Command;
 import bot.exceptions.CommandException;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public abstract class Route {
+public interface Route<T, E> {
 
-	private Command command;
+	boolean isRoute(T input);
 
-	protected Route(Command command) {
-		this.command = command;
-	}
-
-	public abstract boolean isRoute(String input);
-
-	public void route(MessageReceivedEvent event) throws CommandException {
-		command.fire(event);
-	}
+	void route(E event) throws CommandException;
 }

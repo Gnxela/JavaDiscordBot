@@ -18,7 +18,7 @@ public class TestMultiCommand extends MultiCommand {
 				.addPattern(new Pattern.Builder().addConstant("!mc").addConstant("1").addString().addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!mc"))
 				.build();
-		bot.getRouter().on(new LexerRoute(this, lexer));
+		bot.getRouter().addRoute(new LexerRoute(this, lexer));
 	}
 
 	@Override

@@ -9,7 +9,7 @@ public class PingCommand extends Command {
 
 	public PingCommand(Bot bot) {
 		super(bot);
-		bot.getRouter().on(new PrefixRoute(this, "!ping"));
+		bot.getRouter().addRoute(new PrefixRoute(this, "!ping"));
 		try {
 			saveConfig(new JSONObject("{name: alex}"));
 			System.out.println(loadConfig());

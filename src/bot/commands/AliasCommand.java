@@ -11,25 +11,19 @@ import bot.util.Streams;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AliasCommand extends MultiCommand {
 
 	private Map<String, String> aliases;
+	private LexerRoute currentRoute;
 
 	public AliasCommand(Bot bot) {
 		super(bot);
-		Lexer lexer = new Lexer.Builder()
-				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("add").addString().addString().addWhitespaceRetro())
-				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("remove").addString().addWhitespaceRetro())
-				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("list").addWhitespaceRetro())
-				.addPattern(new Pattern.Builder().addConstant("!alias").addWhitespaceRetro())
-				.build();
-		bot.getRouter().on(new LexerRoute(this, lexer));
-		this.aliases = new HashMap<>();
+		this.aliases = new LinkedHashMap<>();
+		updateLexer();
 	}
 
 	@Override
@@ -39,11 +33,13 @@ public class AliasCommand extends MultiCommand {
 				String newAlias = output.getString(2);
 				String originalCommand = output.getString(3);
 				aliases.put(newAlias, originalCommand);
+				updateLexer();
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
 				break;
 			case 1: // Remove
 				String alias = output.getString(2);
 				aliases.remove(alias);
+				updateLexer();
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
 				break;
 			case 2: // List
@@ -61,7 +57,30 @@ public class AliasCommand extends MultiCommand {
 				// TODO: Generate help message from lexer
 				break;
 			default: // An alias we must translate
-				// TODO: Implement the aliases. bot.getRouter().route(originalCommand)
+				String aliasName = output.getString(0);
+				String aliasCommand = aliases.get(aliasName);
+
+				if (aliasCommand != null) {
+					// TODO: If we ever implement admin prvs etc. this will bypass them.
+					bot.getRouter().route(aliasCommand, message);
+				}
 		}
+	}
+
+	private synchronized void updateLexer() {
+		Lexer.Builder lexerBuilder = new Lexer.Builder()
+				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("add").addString().addString().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("remove").addString().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("list").addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!alias").addWhitespaceRetro());
+		for (String aliasName : aliases.keySet()) {
+			lexerBuilder.addPattern(new Pattern.Builder().addConstant(aliasName));
+		}
+		Lexer lexer = lexerBuilder.build();
+		if (currentRoute != null) {
+			bot.getRouter().removeRoute(currentRoute);
+		}
+		currentRoute = new LexerRoute(this, lexer);
+		bot.getRouter().addRoute(currentRoute);
 	}
 }
