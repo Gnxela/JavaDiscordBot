@@ -17,7 +17,7 @@ public class CallCommand extends MultiCommand {
 
 	public CallCommand(Bot bot) {
 		super(bot);
-		Lexer lexer = new Lexer.Builder().debug()
+		Lexer lexer = new Lexer.Builder()
 				.addPattern(new Pattern.Builder().addConstant("!call").addString().addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!call").addWhitespaceRetro())
 				.build();
