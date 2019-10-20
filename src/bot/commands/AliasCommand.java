@@ -43,6 +43,10 @@ public class AliasCommand extends MultiCommand {
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
 				break;
 			case 2: // List
+				if (aliases.isEmpty()) {
+					message.getChannel().sendMessage("No aliases set.").queue();
+					break;
+				}
 				EmbedBuilder template = new EmbedBuilder().setDescription("Loading...");
 				message.getChannel().sendMessage(template.build()).queue(response -> {
 					template.setDescription("");
