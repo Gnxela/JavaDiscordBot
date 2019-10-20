@@ -61,7 +61,10 @@ public class AliasCommand extends MultiCommand {
 				String aliasCommand = aliases.get(aliasName);
 
 				if (aliasCommand != null) {
-					// TODO: If we ever implement admin prvs etc. this will bypass them.
+					// TODO: If we ever implement admin privileges etc. this will bypass them.
+					// This also makes no attempt to modify the underlying message.
+					// So any command that reads the received message rather than using a lexer to parse,
+					// will not work (maybe some future commands that use PrefixRoute).
 					bot.getRouter().route(aliasCommand, message);
 				}
 		}
