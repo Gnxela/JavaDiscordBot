@@ -20,7 +20,7 @@ public class StringToken extends Token {
 			return -1;
 		}
 		outputBuilder.addString(s.substring(index + (s.charAt(index) == '"' ? 1 : 0), trimmedIndex));
-		return trimmedIndex;
+		return trimmedIndex + (s.charAt(index) == '"' ? 1 : 0);
 	}
 
 	@Override

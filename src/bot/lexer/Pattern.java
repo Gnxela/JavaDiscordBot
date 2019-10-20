@@ -7,24 +7,35 @@ import java.util.ArrayList;
 
 public class Pattern {
 
+	private boolean debug;
 	private Token[] pattern;
 
-	public Pattern(Token[] pattern) {
+	public Pattern(Token[] pattern, boolean debug) {
 		this.pattern = pattern;
+		this.debug = debug;
 	}
 
 	@Nullable
 	PatternOutput.Builder parse(String input) {
 		PatternOutput.Builder outputBuilder = new PatternOutput.Builder();
+		debug("\tPattern: " + toString());
 		int index = 0;
 		for (Token token : pattern) {
 			int newIndex = token.parse(input, index, outputBuilder);
 			if (newIndex < index) {
+				debug("\t\tRejected token: " + token.toString());
 				return null;
 			}
+			debug("\t\tAccepted token: " + token.toString());
 			index = newIndex;
 		}
 		return outputBuilder;
+	}
+
+	private void debug(String input) {
+		if (debug) {
+			System.out.println(input);
+		}
 	}
 
 	@Override
@@ -85,9 +96,9 @@ public class Pattern {
 			return this;
 		}
 
-		public Pattern build() {
+		public Pattern build(boolean debug) {
 			Token[] array = new Token[tokens.size()];
-			return new Pattern(tokens.toArray(array));
+			return new Pattern(tokens.toArray(array), debug);
 		}
 	}
 }
