@@ -1,7 +1,6 @@
 package bot.lexer;
 
 import bot.exceptions.BuilderException;
-import bot.paged.PagedMessage;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

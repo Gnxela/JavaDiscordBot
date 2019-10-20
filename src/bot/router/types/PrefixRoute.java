@@ -1,7 +1,6 @@
 package bot.router.types;
 
 import bot.commands.Command;
-import bot.router.Route;
 
 public class PrefixRoute extends MessageRoute {
 

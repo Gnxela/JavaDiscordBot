@@ -11,35 +11,42 @@ import bot.util.Streams;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import java.util.LinkedHashMap;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class AliasCommand extends MultiCommand {
 
-	private Map<String, String> aliases;
+	private static final JSONObject DEFAULT_CONFIG = new JSONObject("{aliases:{}}");
+
+	private JSONObject config;
+	private JSONObject aliases;
 	private LexerRoute currentRoute;
 
 	public AliasCommand(Bot bot) {
 		super(bot);
-		this.aliases = new LinkedHashMap<>();
+		config = loadConfig(DEFAULT_CONFIG);
+		aliases = config.getJSONObject("aliases");
 		updateLexer();
 	}
 
 	@Override
-	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException {
+	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException, IOException {
 		switch (output.getId()) {
 			case 0: // Add
 				String newAlias = output.getString(2);
 				String originalCommand = output.getString(3);
 				aliases.put(newAlias, originalCommand);
 				updateLexer();
+				saveConfig(config);
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
 				break;
 			case 1: // Remove
 				String alias = output.getString(2);
 				aliases.remove(alias);
 				updateLexer();
+				saveConfig(config);
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
 				break;
 			case 2: // List
@@ -50,7 +57,9 @@ public class AliasCommand extends MultiCommand {
 				EmbedBuilder template = new EmbedBuilder().setDescription("Loading...");
 				message.getChannel().sendMessage(template.build()).queue(response -> {
 					template.setDescription("");
-					MessageEmbed.Field[] fields = aliases.entrySet().stream().map(Streams::entryToFieldInline).toArray(MessageEmbed.Field[]::new);
+					MessageEmbed.Field[] fields = aliases.toMap().entrySet().stream()
+							.map(Streams::entryToFieldInline)
+							.toArray(MessageEmbed.Field[]::new);
 					List<MessageEmbed> pages = PagedMessageEmbed.fieldsToEmbeds(template, 5, fields);
 					List<MessageEmbed> pagesWithIndex = PagedMessageEmbed.embedsAddIndex(pages);
 					PagedMessageEmbed pagedMessage = new PagedMessageEmbed(false, message.getAuthor(), response, pagesWithIndex);
@@ -62,7 +71,7 @@ public class AliasCommand extends MultiCommand {
 				break;
 			default: // An alias we must translate
 				String aliasName = output.getString(0);
-				String aliasCommand = aliases.get(aliasName);
+				String aliasCommand = (String) aliases.get(aliasName);
 
 				if (aliasCommand != null) {
 					// TODO: If we ever implement admin privileges etc. this will bypass them.

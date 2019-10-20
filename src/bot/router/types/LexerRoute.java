@@ -4,8 +4,9 @@ import bot.commands.MultiCommand;
 import bot.exceptions.CommandException;
 import bot.lexer.Lexer;
 import bot.lexer.PatternOutput;
-import bot.router.Route;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import java.io.IOException;
 
 public class LexerRoute extends MessageRoute {
 
@@ -24,7 +25,7 @@ public class LexerRoute extends MessageRoute {
 	}
 
 	@Override
-	public void route(String identifier, MessageReceivedEvent event) throws CommandException {
+	public void route(String identifier, MessageReceivedEvent event) throws CommandException, IOException {
 		PatternOutput output = lexer.parse(identifier);
 		multiCommand.fire(output, event);
 	}

@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
@@ -79,7 +80,7 @@ public class Bot extends ListenerAdapter {
 		}
 		try {
 			router.route(event.getMessage().getContentRaw(), event);
-		} catch (CommandException e) {
+		} catch (CommandException | IOException e) {
 			// TODO: In future we don't want to leak error messages to Discord. But for development this is ok.
 			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": " + e.getMessage()).queue();
 		}

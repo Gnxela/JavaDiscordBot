@@ -5,6 +5,8 @@ import bot.exceptions.CommandException;
 import bot.router.Route;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.io.IOException;
+
 public abstract class MessageRoute implements Route<String, MessageReceivedEvent> {
 
 	private Command command;
@@ -15,7 +17,7 @@ public abstract class MessageRoute implements Route<String, MessageReceivedEvent
 
 	public abstract boolean isRoute(String identifier);
 
-	public void route(String identifier, MessageReceivedEvent event) throws CommandException {
+	public void route(String identifier, MessageReceivedEvent event) throws CommandException, IOException {
 		command.fire(event);
 	}
 

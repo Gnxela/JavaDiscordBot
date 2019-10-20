@@ -10,7 +10,7 @@ public class Streams {
 		return new MessageEmbed.Field(entry.getKey(), entry.getValue(), false, true);
 	}
 
-	public static MessageEmbed.Field entryToFieldInline(Map.Entry<String, String> entry) {
-		return new MessageEmbed.Field(entry.getKey(), entry.getValue(), true, true);
+	public static MessageEmbed.Field entryToFieldInline(Map.Entry<String, Object> entry) {
+		return new MessageEmbed.Field(entry.getKey(), entry.getValue().toString(), true, true);
 	}
 }
