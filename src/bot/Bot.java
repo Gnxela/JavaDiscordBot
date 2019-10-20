@@ -27,6 +27,7 @@ public class Bot extends ListenerAdapter {
 			PingCommand.class,
 			RollCommand.class,
 			AliasCommand.class,
+			CallCommand.class,
 			TestPageCommand.class,
 			TestMultiCommand.class
 	};
