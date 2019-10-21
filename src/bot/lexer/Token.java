@@ -4,6 +4,17 @@ public abstract class Token {
 
 	// Open close. Start is inclusive, end is not.
 	private int start, end;
+	// TODO: Better id for 'id'. Representation?
+	// The id of the token, or what it is capturing. Displayed in help.
+	protected String id;
+
+	protected Token(String id) {
+		this.id = id;
+	}
+
+	protected Token() {
+		this("untitled");
+	}
 
 	/**
 	 * Parses a string starting at the given index.
@@ -31,6 +42,10 @@ public abstract class Token {
 
 	public void setEnd(int end) {
 		this.end = end;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	@Override

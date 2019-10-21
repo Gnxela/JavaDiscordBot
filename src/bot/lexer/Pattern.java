@@ -62,18 +62,18 @@ public class Pattern {
 			return this;
 		}
 
-		public Builder addInt() {
-			tokens.add(new IntToken());
+		public Builder addInt(String id) {
+			tokens.add(new IntToken(id));
 			return this;
 		}
 
-		public Builder addFloat() {
-			tokens.add(new FloatToken());
+		public Builder addFloat(String id) {
+			tokens.add(new FloatToken(id));
 			return this;
 		}
 
-		public Builder addString() {
-			tokens.add(new StringToken());
+		public Builder addString(String id) {
+			tokens.add(new StringToken(id));
 			return this;
 		}
 

@@ -8,6 +8,10 @@ public class FloatToken extends Token {
 
 	private static final char[] DECIMAL_CHARS = new char[]{'.', ','};
 
+	public FloatToken(String id) {
+		super(id);
+	}
+
 	@Override
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
 		boolean negative = false;
@@ -29,7 +33,7 @@ public class FloatToken extends Token {
 		if (negative) {
 			f *= -1;
 		}
-		outputBuilder.addFloat(f);
+		outputBuilder.addFloat(id, f);
 		return finalIndex;
 	}
 

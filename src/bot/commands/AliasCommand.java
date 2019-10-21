@@ -37,15 +37,15 @@ public class AliasCommand extends MultiCommand {
 	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException, IOException {
 		switch (output.getId()) {
 			case 0: // Add
-				String newAlias = output.getString(2);
-				String originalCommand = output.getString(3);
+				String newAlias = output.getString("alias");
+				String originalCommand = output.getString("command");
 				aliases.put(newAlias, originalCommand);
 				updateLexer();
 				saveConfig(config);
 				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
 				break;
 			case 1: // Remove
-				String alias = output.getString(2);
+				String alias = output.getString("alias");
 				aliases.remove(alias);
 				updateLexer();
 				saveConfig(config);
@@ -72,7 +72,7 @@ public class AliasCommand extends MultiCommand {
 				// TODO: Generate help message from lexer
 				break;
 			default: // An alias we must translate
-				String aliasName = output.getString(0);
+				String aliasName = output.getKeys().stream().findFirst().orElse(null);
 				String aliasCommand = (String) aliases.get(aliasName);
 
 				if (aliasCommand != null) {
@@ -87,8 +87,8 @@ public class AliasCommand extends MultiCommand {
 
 	private synchronized void updateLexer() {
 		Lexer.Builder lexerBuilder = new Lexer.Builder()
-				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("add").addString().addString().addWhitespaceRetro())
-				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("remove").addString().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("add").addString("alias").addString("command").addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("remove").addString("alias").addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!alias").addConstant("list").addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!alias").addWhitespaceRetro());
 		for (String aliasName : aliases.keySet()) {

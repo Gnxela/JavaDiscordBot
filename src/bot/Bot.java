@@ -30,7 +30,6 @@ public class Bot extends ListenerAdapter {
 			AliasCommand.class,
 			CallCommand.class,
 			TestPageCommand.class,
-			TestMultiCommand.class
 	};
 
 	private String token;

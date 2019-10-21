@@ -18,7 +18,7 @@ public class CallCommand extends MultiCommand {
 	public CallCommand(Bot bot) {
 		super(bot);
 		Lexer lexer = new Lexer.Builder()
-				.addPattern(new Pattern.Builder().addConstant("!call").addString().addWhitespaceRetro())
+				.addPattern(new Pattern.Builder().addConstant("!call").addString("role").addWhitespaceRetro())
 				.addPattern(new Pattern.Builder().addConstant("!call").addWhitespaceRetro())
 				.build();
 		bot.getRouter().addRoute(new LexerRoute(this, lexer));
@@ -28,7 +28,7 @@ public class CallCommand extends MultiCommand {
 	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException {
 		switch (output.getId()) {
 			case 0: // correct arguments
-				String roleName = output.getString(1);
+				String roleName = output.getString("role");
 				Role calledRoll = message.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(roleName)).findFirst().orElse(null);
 				if (calledRoll == null) {
 					message.getChannel().sendMessage(message.getAuthor().getAsMention() + " role not found.").queue();

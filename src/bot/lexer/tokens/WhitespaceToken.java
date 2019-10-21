@@ -7,7 +7,7 @@ import bot.util.Strings;
 public class WhitespaceToken extends Token {
 
 	public WhitespaceToken() {
-
+		super(" ");
 	}
 
 	@Override

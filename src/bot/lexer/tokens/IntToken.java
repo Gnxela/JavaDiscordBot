@@ -6,6 +6,9 @@ import bot.util.Strings;
 
 public class IntToken extends Token {
 
+	public IntToken(String id) {
+		super(id);
+	}
 
 	@Override
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
@@ -22,7 +25,7 @@ public class IntToken extends Token {
 		if (negative) {
 			i *= -1;
 		}
-		outputBuilder.addInt(i);
+		outputBuilder.addInt(id, i);
 		return trimmedIndex;
 	}
 

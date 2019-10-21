@@ -3,27 +3,38 @@ package bot.lexer;
 import bot.exceptions.BuilderException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class PatternOutput {
 
-	public Object[] output;
+	public Map<String, Object> values;
 	private int id;
 
-	PatternOutput(int id, Object[] output) {
+	PatternOutput(int id, Map<String, Object> values) {
 		this.id = id;
-		this.output = output;
+		this.values = values;
 	}
 
-	public Integer getInt(int i) {
-		return (Integer) output[i];
+	public Integer getInt(String id) {
+		return (Integer) get(id);
 	}
 
-	public Float getFloat(int i) {
-		return (Float) output[i];
+	public Float getFloat(String id) {
+		return (Float) get(id);
 	}
 
-	public String getString(int i) {
-		return (String) output[i];
+	public String getString(String id) {
+		return (String) get(id);
+	}
+
+	public Set<String> getKeys() {
+		return values.keySet();
+	}
+
+	private Object get(String id) {
+		return values.get(id);
 	}
 
 	public int getId() {
@@ -33,38 +44,38 @@ public class PatternOutput {
 	public static class Builder {
 
 		private int id = -1;
-		private ArrayList<Object> output;
+		private Map<String, Object> values;
 
 		public Builder() {
-			this.output = new ArrayList<>();
+			this.values = new HashMap<>();
 		}
 
 		public void setId(int id) {
 			this.id = id;
 		}
 
-		private Builder add(Object o) {
-			output.add(o);
+		private Builder add(String id, Object o) {
+			values.put(id, o);
 			return this;
 		}
 
-		public Builder addInt(Integer i) {
-			return add(i);
+		public Builder addInt(String id, Integer i) {
+			return add(id, i);
 		}
 
-		public Builder addFloat(Float f) {
-			return add(f);
+		public Builder addFloat(String id, Float f) {
+			return add(id, f);
 		}
 
-		public Builder addString(String s) {
-			return add(s);
+		public Builder addString(String id, String s) {
+			return add(id, s);
 		}
 
 		public PatternOutput build() throws BuilderException {
 			if (id == -1) {
 				throw new BuilderException("Tried to build PatternOutput without an ID.");
 			}
-			return new PatternOutput(id, output.toArray());
+			return new PatternOutput(id, values);
 		}
 	}
 }
