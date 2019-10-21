@@ -38,6 +38,21 @@ public class Pattern {
 		}
 	}
 
+	public String generateHelp() {
+		StringBuilder sb = new StringBuilder();
+		for (Token token : pattern) {
+			String id = token.id;
+			if (!(token instanceof WhitespaceToken || token instanceof  ConstantToken)) {
+				sb.append("<");
+				sb.append(id);
+				sb.append(">");
+			} else {
+				sb.append(id);
+			}
+		}
+		return sb.toString();
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("<Pattern ");

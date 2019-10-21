@@ -45,6 +45,15 @@ public class Lexer {
 		}
 	}
 
+	public String generateHelp() {
+		StringBuilder sb = new StringBuilder();
+		for (Pattern pattern : patterns) {
+			sb.append(pattern.generateHelp());
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("<Lexer ");
