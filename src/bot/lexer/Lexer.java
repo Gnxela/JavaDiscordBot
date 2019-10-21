@@ -4,6 +4,7 @@ import bot.exceptions.BuilderException;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Lexer {
 
@@ -45,13 +46,12 @@ public class Lexer {
 		}
 	}
 
-	public String generateHelp() {
-		StringBuilder sb = new StringBuilder();
+	public List<String> generateHelp() {
+		List<String> list = new ArrayList<>();
 		for (Pattern pattern : patterns) {
-			sb.append(pattern.generateHelp());
-			sb.append("\n");
+			list.add(pattern.generateHelp());
 		}
-		return sb.toString();
+		return list;
 	}
 
 	@Override
