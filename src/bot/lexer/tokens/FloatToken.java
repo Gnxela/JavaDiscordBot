@@ -2,7 +2,7 @@ package bot.lexer.tokens;
 
 import bot.lexer.PatternOutput;
 import bot.lexer.Token;
-import bot.util.Strings;
+import bot.util.StringUtil;
 
 public class FloatToken extends Token {
 
@@ -19,12 +19,12 @@ public class FloatToken extends Token {
 			index++; // Skip the negation.
 			negative = true;
 		}
-		int trimmedIndex = Strings.skipCharsUntil(index, s, Strings.NUMBER_CHARS, DECIMAL_CHARS);
+		int trimmedIndex = StringUtil.skipCharsUntil(index, s, StringUtil.NUMBER_CHARS, DECIMAL_CHARS);
 		if (trimmedIndex <= index) {
 			return -1;
 		}
 		trimmedIndex++;
-		int finalIndex = Strings.skipChars(trimmedIndex, s, Strings.NUMBER_CHARS);
+		int finalIndex = StringUtil.skipChars(trimmedIndex, s, StringUtil.NUMBER_CHARS);
 		if (finalIndex == trimmedIndex) {
 			return -1;
 		}

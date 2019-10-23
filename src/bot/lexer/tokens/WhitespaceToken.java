@@ -2,7 +2,7 @@ package bot.lexer.tokens;
 
 import bot.lexer.PatternOutput;
 import bot.lexer.Token;
-import bot.util.Strings;
+import bot.util.StringUtil;
 
 public class WhitespaceToken extends Token {
 
@@ -12,7 +12,7 @@ public class WhitespaceToken extends Token {
 
 	@Override
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
-		int trimmedIndex = Strings.skipChars(index, s, Strings.WHITESPACE_CHARS);
+		int trimmedIndex = StringUtil.skipChars(index, s, StringUtil.WHITESPACE_CHARS);
 		if (trimmedIndex == index) {
 			return -1;
 		}

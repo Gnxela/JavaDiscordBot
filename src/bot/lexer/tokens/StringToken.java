@@ -2,7 +2,7 @@ package bot.lexer.tokens;
 
 import bot.lexer.PatternOutput;
 import bot.lexer.Token;
-import bot.util.Strings;
+import bot.util.StringUtil;
 
 public class StringToken extends Token {
 
@@ -16,9 +16,9 @@ public class StringToken extends Token {
 	public int parse(String s, int index, PatternOutput.Builder outputBuilder) {
 		int trimmedIndex;
 		if (s.charAt(index) == '"') {
-			trimmedIndex = Strings.skipUntil(index + 1, s, QUOTE_CHAR);
+			trimmedIndex = StringUtil.skipUntil(index + 1, s, QUOTE_CHAR);
 		} else {
-			trimmedIndex = Strings.skipUntil(index, s, Strings.WHITESPACE_CHARS);
+			trimmedIndex = StringUtil.skipUntil(index, s, StringUtil.WHITESPACE_CHARS);
 		}
 		if (trimmedIndex <= index) {
 			return -1;

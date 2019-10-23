@@ -2,7 +2,7 @@ package bot.lexer.tokens;
 
 import bot.lexer.PatternOutput;
 import bot.lexer.Token;
-import bot.util.Strings;
+import bot.util.StringUtil;
 
 public class IntToken extends Token {
 
@@ -17,7 +17,7 @@ public class IntToken extends Token {
 			index++; // Skip the negation.
 			negative = true;
 		}
-		int trimmedIndex = Strings.skipChars(index, s, Strings.NUMBER_CHARS);
+		int trimmedIndex = StringUtil.skipChars(index, s, StringUtil.NUMBER_CHARS);
 		if (trimmedIndex == index) {
 			return -1;
 		}

@@ -8,7 +8,7 @@ import bot.lexer.PatternOutput;
 import bot.paged.PagedMessageEmbed;
 import bot.router.types.LexerRoute;
 import bot.util.MessageUtil;
-import bot.util.Streams;
+import bot.util.StreamUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -61,7 +61,7 @@ public class AliasCommand extends MultiCommand {
 				message.getChannel().sendMessage(template.build()).queue(response -> {
 					template.setDescription("");
 					MessageEmbed.Field[] fields = aliases.toMap().entrySet().stream()
-							.map(Streams::entryToFieldInline)
+							.map(StreamUtil::entryToFieldInline)
 							.toArray(MessageEmbed.Field[]::new);
 					List<MessageEmbed> pages = PagedMessageEmbed.fieldsToEmbeds(template, 5, fields);
 					List<MessageEmbed> pagesWithIndex = PagedMessageEmbed.embedsAddIndex(pages);

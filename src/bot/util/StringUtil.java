@@ -1,6 +1,6 @@
 package bot.util;
 
-public class Strings {
+public class StringUtil {
 
 	public static final char[] WHITESPACE_CHARS = new char[]{' ', '\t'};
 	public static final char[] NUMBER_CHARS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
