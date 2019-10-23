@@ -42,7 +42,7 @@ public class Pattern {
 		StringBuilder sb = new StringBuilder();
 		for (Token token : pattern) {
 			String id = token.id;
-			if (!(token instanceof WhitespaceToken || token instanceof  ConstantToken)) {
+			if (!(token instanceof WhitespaceToken || token instanceof ConstantToken)) {
 				sb.append("<");
 				sb.append(id);
 				sb.append(">");

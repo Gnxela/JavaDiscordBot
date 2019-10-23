@@ -2,11 +2,11 @@ package bot.lexer;
 
 public abstract class Token {
 
-	// Open close. Start is inclusive, end is not.
-	private int start, end;
 	// TODO: Better id for 'id'. Representation?
 	// The id of the token, or what it is capturing. Displayed in help.
 	protected String id;
+	// Open close. Start is inclusive, end is not.
+	private int start, end;
 
 	protected Token(String id) {
 		this.id = id;
