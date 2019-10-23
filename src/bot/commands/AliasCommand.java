@@ -7,6 +7,7 @@ import bot.lexer.Pattern;
 import bot.lexer.PatternOutput;
 import bot.paged.PagedMessageEmbed;
 import bot.router.types.LexerRoute;
+import bot.util.MessageUtil;
 import bot.util.Streams;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -69,7 +70,9 @@ public class AliasCommand extends MultiCommand {
 				});
 				break;
 			case 3: // Display help
-				// TODO: Generate help message from lexer
+				EmbedBuilder helpBuilder = MessageUtil.generateHelpEmbed(currentRoute.getLexer());
+				helpBuilder.setTitle("Alias Help");
+				message.getChannel().sendMessage(helpBuilder.build()).queue();
 				break;
 			default: // An alias we must translate
 				String aliasName = output.getKeys().stream().findFirst().orElse(null);

@@ -29,4 +29,8 @@ public class LexerRoute extends MessageRoute {
 		PatternOutput output = lexer.parse(identifier);
 		multiCommand.fire(output, event);
 	}
+
+	public Lexer getLexer() {
+		return lexer;
+	}
 }
