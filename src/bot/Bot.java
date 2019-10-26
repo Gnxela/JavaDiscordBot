@@ -29,6 +29,7 @@ public class Bot extends ListenerAdapter {
 			RollCommand.class,
 			AliasCommand.class,
 			CallCommand.class,
+			MoveCommand.class,
 			TestPageCommand.class,
 	};
 
