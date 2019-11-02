@@ -1,10 +1,15 @@
 package bot.lexer;
 
+import bot.commands.MultiCommand;
 import bot.exceptions.BuilderException;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Lexer {
 
@@ -44,6 +49,25 @@ public class Lexer {
 		if (debug) {
 			System.out.println(input);
 		}
+	}
+
+
+	public static Map<Integer, Method> getHandlerMap(Object o) {
+		Map<Integer, Method> handlerMap = new HashMap<>();
+		// TODO: Does not look at superclasses.
+		Method[] methods = o.getClass().getDeclaredMethods();
+		for (Method method : methods) {
+			if (!method.isAnnotationPresent(LexerHandler.class)) {
+				continue;
+			}
+			LexerHandler annotation = method.getAnnotation(LexerHandler.class);
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			if (parameterTypes.length == 2 && parameterTypes[0] == PatternOutput.class && parameterTypes[1] == MessageReceivedEvent.class) {
+				method.setAccessible(true);
+				handlerMap.put(annotation.id(), method);
+			}
+		}
+		return handlerMap;
 	}
 
 	public List<String> generateHelp() {

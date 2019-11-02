@@ -3,6 +3,7 @@ package bot.commands;
 import bot.Bot;
 import bot.exceptions.CommandException;
 import bot.lexer.Lexer;
+import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
 import bot.lexer.PatternOutput;
 import bot.paged.PagedMessageEmbed;
@@ -34,57 +35,62 @@ public class AliasCommand extends MultiCommand {
 		updateLexer();
 	}
 
-	@Override
-	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException, IOException {
-		switch (output.getId()) {
-			case 0: // Add
-				String newAlias = output.getString("alias");
-				String originalCommand = output.getString("command");
-				aliases.put(newAlias, originalCommand);
-				updateLexer();
-				saveConfig(config);
-				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
-				break;
-			case 1: // Remove
-				String alias = output.getString("alias");
-				aliases.remove(alias);
-				updateLexer();
-				saveConfig(config);
-				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
-				break;
-			case 2: // List
-				if (aliases.isEmpty()) {
-					message.getChannel().sendMessage("No aliases set.").queue();
-					break;
-				}
-				EmbedBuilder template = new EmbedBuilder().setDescription("Loading...");
-				message.getChannel().sendMessage(template.build()).queue(response -> {
-					template.setDescription("");
-					MessageEmbed.Field[] fields = aliases.toMap().entrySet().stream()
-							.map(StreamUtil::entryToFieldInline)
-							.toArray(MessageEmbed.Field[]::new);
-					List<MessageEmbed> pages = PagedMessageEmbed.fieldsToEmbeds(template, 5, fields);
-					List<MessageEmbed> pagesWithIndex = PagedMessageEmbed.embedsAddIndex(pages);
-					PagedMessageEmbed pagedMessage = new PagedMessageEmbed(false, message.getAuthor(), response, pagesWithIndex);
-					bot.getPagedMessageManager().add(pagedMessage);
-				});
-				break;
-			case 3: // Display help
-				EmbedBuilder helpBuilder = MessageUtil.generateHelpEmbed(currentRoute.getLexer());
-				helpBuilder.setTitle("Alias Help");
-				message.getChannel().sendMessage(helpBuilder.build()).queue();
-				break;
-			default: // An alias we must translate
-				String aliasName = output.getKeys().stream().findFirst().orElse(null);
-				String aliasCommand = (String) aliases.get(aliasName);
+	@LexerHandler(id =0)
+	private void add(PatternOutput output, MessageReceivedEvent message) throws IOException {
+		String newAlias = output.getString("alias");
+		String originalCommand = output.getString("command");
+		aliases.put(newAlias, originalCommand);
+		updateLexer();
+		saveConfig(config);
+		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
+	}
 
-				if (aliasCommand != null) {
-					// TODO: If we ever implement admin privileges etc. this will bypass them.
-					// This also makes no attempt to modify the underlying message.
-					// So any command that reads the received message rather than using a lexer to parse,
-					// will not work (maybe some future commands that use PrefixRoute).
-					bot.getRouter().route(aliasCommand, message);
-				}
+	@LexerHandler(id =1)
+	private void remove(PatternOutput output, MessageReceivedEvent message) throws IOException {
+		String alias = output.getString("alias");
+		aliases.remove(alias);
+		updateLexer();
+		saveConfig(config);
+		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
+	}
+
+	@LexerHandler(id =2)
+	private void list(PatternOutput output, MessageReceivedEvent message) {
+		if (aliases.isEmpty()) {
+			message.getChannel().sendMessage("No aliases set.").queue();
+			return;
+		}
+		EmbedBuilder template = new EmbedBuilder().setDescription("Loading...");
+		message.getChannel().sendMessage(template.build()).queue(response -> {
+			template.setDescription("");
+			MessageEmbed.Field[] fields = aliases.toMap().entrySet().stream()
+					.map(StreamUtil::entryToFieldInline)
+					.toArray(MessageEmbed.Field[]::new);
+			List<MessageEmbed> pages = PagedMessageEmbed.fieldsToEmbeds(template, 5, fields);
+			List<MessageEmbed> pagesWithIndex = PagedMessageEmbed.embedsAddIndex(pages);
+			PagedMessageEmbed pagedMessage = new PagedMessageEmbed(false, message.getAuthor(), response, pagesWithIndex);
+			bot.getPagedMessageManager().add(pagedMessage);
+		});
+	}
+
+	@LexerHandler(id =3)
+	private void help(PatternOutput output, MessageReceivedEvent message) throws IOException {
+		EmbedBuilder helpBuilder = MessageUtil.generateHelpEmbed(currentRoute.getLexer());
+		helpBuilder.setTitle("Alias Help");
+		message.getChannel().sendMessage(helpBuilder.build()).queue();
+	}
+
+	@LexerHandler(id = -1)
+	private void wildcard(PatternOutput output, MessageReceivedEvent message) throws CommandException, IOException {
+		String aliasName = output.getKeys().stream().findFirst().orElse(null);
+		String aliasCommand = (String) aliases.get(aliasName);
+
+		if (aliasCommand != null) {
+			// TODO: If we ever implement admin privileges etc. this will bypass them.
+			// This also makes no attempt to modify the underlying message.
+			// So any command that reads the received message rather than using a lexer to parse,
+			// will not work (maybe some future commands that use PrefixRoute).
+			bot.getRouter().route(aliasCommand, message);
 		}
 	}
 

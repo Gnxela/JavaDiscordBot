@@ -3,6 +3,7 @@ package bot.commands;
 import bot.Bot;
 import bot.exceptions.CommandException;
 import bot.lexer.Lexer;
+import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
 import bot.lexer.PatternOutput;
 import bot.router.types.LexerRoute;
@@ -19,24 +20,20 @@ public class RollCommand extends MultiCommand {
 		bot.getRouter().addRoute(new LexerRoute(this, lexer));
 	}
 
-	@Override
-	public void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException {
-		switch (output.getId()) {
-			case 0: // correct arguments
-				int sides = output.getInt("sides");
-				if (sides > 0) {
-					int roll = Bot.RANDOM.nextInt(sides) + 1;
-					String reply = message.getAuthor().getAsMention() + " rolled: " + roll;
-					message.getChannel().sendMessage(reply).queue();
-					break;
-				} else {
-					// Fallthrough
-				}
-			case 1:
-				message.getChannel().sendMessage(message.getAuthor().getAsMention() + " invalid arguments.").queue();
-				break;
-			default:
-				throw new CommandException("Unknown subcommand ID.");
+	@LexerHandler(id = 0)
+	private void roll(PatternOutput output, MessageReceivedEvent message) {
+		int sides = output.getInt("sides");
+		if (sides > 0) {
+			int roll = Bot.RANDOM.nextInt(sides) + 1;
+			String reply = message.getAuthor().getAsMention() + " rolled: " + roll;
+			message.getChannel().sendMessage(reply).queue();
+		} else {
+			help(output, message);
 		}
+	}
+
+	@LexerHandler(id = 1)
+	private void help(PatternOutput output, MessageReceivedEvent message) {
+		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " invalid arguments.").queue();
 	}
 }

@@ -13,8 +13,6 @@ public abstract class MultiCommand extends Command {
 		super(bot);
 	}
 
-	public abstract void fire(PatternOutput output, MessageReceivedEvent message) throws CommandException, IOException;
-
 	@Override
 	@Deprecated
 	public void fire(MessageReceivedEvent message) throws CommandException, IOException {
