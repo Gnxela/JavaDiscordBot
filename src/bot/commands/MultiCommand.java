@@ -2,7 +2,6 @@ package bot.commands;
 
 import bot.Bot;
 import bot.exceptions.CommandException;
-import bot.lexer.PatternOutput;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;

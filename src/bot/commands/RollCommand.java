@@ -1,7 +1,6 @@
 package bot.commands;
 
 import bot.Bot;
-import bot.exceptions.CommandException;
 import bot.lexer.Lexer;
 import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;

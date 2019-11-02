@@ -25,7 +25,7 @@ public class CallCommand extends MultiCommand {
 		bot.getRouter().addRoute(new LexerRoute(this, lexer));
 	}
 
-	@LexerHandler(id =0)
+	@LexerHandler(id = 0)
 	private void call(PatternOutput output, MessageReceivedEvent message) throws CommandException {
 		String roleName = output.getString("role");
 		Role calledRoll = message.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(roleName)).findFirst().orElse(null);

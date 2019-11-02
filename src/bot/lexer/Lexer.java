@@ -1,6 +1,5 @@
 package bot.lexer;
 
-import bot.commands.MultiCommand;
 import bot.exceptions.BuilderException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -23,6 +22,24 @@ public class Lexer {
 
 	// TODO: Lexer should convert the array of patterns to a tree, so if multiple patterns start with the same token it will only need to be computed once.
 	// This will require all Tokens to have an equals() method.
+
+	public static Map<Integer, Method> getHandlerMap(Object o) {
+		Map<Integer, Method> handlerMap = new HashMap<>();
+		// TODO: Does not look at superclasses.
+		Method[] methods = o.getClass().getDeclaredMethods();
+		for (Method method : methods) {
+			if (!method.isAnnotationPresent(LexerHandler.class)) {
+				continue;
+			}
+			LexerHandler annotation = method.getAnnotation(LexerHandler.class);
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			if (parameterTypes.length == 2 && parameterTypes[0] == PatternOutput.class && parameterTypes[1] == MessageReceivedEvent.class) {
+				method.setAccessible(true);
+				handlerMap.put(annotation.id(), method);
+			}
+		}
+		return handlerMap;
+	}
 
 	@Nullable
 	public PatternOutput parse(String input) {
@@ -49,25 +66,6 @@ public class Lexer {
 		if (debug) {
 			System.out.println(input);
 		}
-	}
-
-
-	public static Map<Integer, Method> getHandlerMap(Object o) {
-		Map<Integer, Method> handlerMap = new HashMap<>();
-		// TODO: Does not look at superclasses.
-		Method[] methods = o.getClass().getDeclaredMethods();
-		for (Method method : methods) {
-			if (!method.isAnnotationPresent(LexerHandler.class)) {
-				continue;
-			}
-			LexerHandler annotation = method.getAnnotation(LexerHandler.class);
-			Class<?>[] parameterTypes = method.getParameterTypes();
-			if (parameterTypes.length == 2 && parameterTypes[0] == PatternOutput.class && parameterTypes[1] == MessageReceivedEvent.class) {
-				method.setAccessible(true);
-				handlerMap.put(annotation.id(), method);
-			}
-		}
-		return handlerMap;
 	}
 
 	public List<String> generateHelp() {

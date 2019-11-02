@@ -35,7 +35,7 @@ public class AliasCommand extends MultiCommand {
 		updateLexer();
 	}
 
-	@LexerHandler(id =0)
+	@LexerHandler(id = 0)
 	private void add(PatternOutput output, MessageReceivedEvent message) throws IOException {
 		String newAlias = output.getString("alias");
 		String originalCommand = output.getString("command");
@@ -45,7 +45,7 @@ public class AliasCommand extends MultiCommand {
 		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
 	}
 
-	@LexerHandler(id =1)
+	@LexerHandler(id = 1)
 	private void remove(PatternOutput output, MessageReceivedEvent message) throws IOException {
 		String alias = output.getString("alias");
 		aliases.remove(alias);
@@ -54,7 +54,7 @@ public class AliasCommand extends MultiCommand {
 		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
 	}
 
-	@LexerHandler(id =2)
+	@LexerHandler(id = 2)
 	private void list(PatternOutput output, MessageReceivedEvent message) {
 		if (aliases.isEmpty()) {
 			message.getChannel().sendMessage("No aliases set.").queue();
@@ -73,7 +73,7 @@ public class AliasCommand extends MultiCommand {
 		});
 	}
 
-	@LexerHandler(id =3)
+	@LexerHandler(id = 3)
 	private void help(PatternOutput output, MessageReceivedEvent message) throws IOException {
 		EmbedBuilder helpBuilder = MessageUtil.generateHelpEmbed(currentRoute.getLexer());
 		helpBuilder.setTitle("Alias Help");
