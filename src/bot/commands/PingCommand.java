@@ -5,17 +5,13 @@ import bot.router.types.PrefixRoute;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class PingCommand extends Command {
 
 	public PingCommand(Bot bot) {
 		super(bot);
 		bot.getRouter().addRoute(new PrefixRoute(this, "!ping"));
-		try {
-			saveConfig(new JSONObject("{name: alex}"));
-			System.out.println(loadConfig());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package bot.commands;
 import bot.Bot;
 import bot.exceptions.CommandException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -33,7 +34,7 @@ public abstract class Command {
 		try {
 			JSONTokener tokener = new JSONTokener(content);
 			return new JSONObject(tokener);
-		} catch (Exception e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return null;
