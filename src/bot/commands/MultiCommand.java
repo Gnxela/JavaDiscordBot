@@ -14,7 +14,7 @@ public abstract class MultiCommand extends Command {
 
 	@Override
 	@Deprecated
-	public void fire(MessageReceivedEvent message) throws CommandException, IOException {
+	public void fire(MessageReceivedEvent message) throws CommandException {
 		throw new CommandException("Call to fire(MessageReceivedEvent) in multicommand.");
 	}
 }

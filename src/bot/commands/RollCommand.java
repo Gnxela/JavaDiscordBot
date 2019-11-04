@@ -1,6 +1,7 @@
 package bot.commands;
 
 import bot.Bot;
+import bot.exceptions.UserInputException;
 import bot.lexer.Lexer;
 import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
@@ -20,7 +21,7 @@ public class RollCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 0)
-	private void roll(PatternOutput output, MessageReceivedEvent message) {
+	private void roll(PatternOutput output, MessageReceivedEvent message) throws UserInputException {
 		int sides = output.getInt("sides");
 		if (sides > 0) {
 			int roll = Bot.RANDOM.nextInt(sides) + 1;
@@ -32,7 +33,7 @@ public class RollCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 1)
-	private void help(PatternOutput output, MessageReceivedEvent message) {
-		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " invalid arguments.").queue();
+	private void help(PatternOutput output, MessageReceivedEvent message) throws UserInputException {
+		throw new UserInputException("Invalid arguments.");
 	}
 }

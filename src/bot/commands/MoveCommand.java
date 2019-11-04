@@ -2,6 +2,7 @@ package bot.commands;
 
 import bot.Bot;
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 import bot.lexer.Lexer;
 import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
@@ -27,7 +28,7 @@ public class MoveCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 0)
-	private void moveSrcDest(PatternOutput output, MessageReceivedEvent message) throws CommandException {
+	private void moveSrcDest(PatternOutput output, MessageReceivedEvent message) throws UserInputException {
 		// TODO: Permissions checking (here and other places)
 		String from = output.getString("from");
 		String to = output.getString("to");
@@ -38,21 +39,21 @@ public class MoveCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 1)
-	private void moveDest(PatternOutput output, MessageReceivedEvent message) throws CommandException {
+	private void moveDest(PatternOutput output, MessageReceivedEvent message) {
 
 	}
 
 	@LexerHandler(id = 2)
-	private void help(PatternOutput output, MessageReceivedEvent message) throws CommandException {
+	private void help(PatternOutput output, MessageReceivedEvent message) {
 
 	}
 
-	private VoiceChannel findChannel(String name, List<GuildChannel> channels) throws CommandException {
+	private VoiceChannel findChannel(String name, List<GuildChannel> channels) throws UserInputException {
 		for (GuildChannel channel : channels) {
 			if (channel.getType() == ChannelType.VOICE && channel.getName().equalsIgnoreCase(name)) {
 				return (VoiceChannel) channel;
 			}
 		}
-		throw new CommandException("Channel not found.");
+		throw new UserInputException("Channel not found.");
 	}
 }

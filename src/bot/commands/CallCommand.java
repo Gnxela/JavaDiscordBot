@@ -26,7 +26,7 @@ public class CallCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 0)
-	private void call(PatternOutput output, MessageReceivedEvent message) throws CommandException {
+	private void call(PatternOutput output, MessageReceivedEvent message) {
 		String roleName = output.getString("role");
 		Role calledRoll = message.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(roleName)).findFirst().orElse(null);
 		if (calledRoll == null) {
@@ -46,7 +46,7 @@ public class CallCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 1)
-	private void help(PatternOutput output, MessageReceivedEvent message) throws CommandException {
+	private void help(PatternOutput output, MessageReceivedEvent message) {
 		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " invalid arguments.").queue();
 	}
 }
