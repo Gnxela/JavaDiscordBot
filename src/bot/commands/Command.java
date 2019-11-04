@@ -2,6 +2,7 @@ package bot.commands;
 
 import bot.Bot;
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,7 +22,7 @@ public abstract class Command {
 		this.bot = bot;
 	}
 
-	public abstract void fire(MessageReceivedEvent message) throws CommandException, IOException;
+	public abstract void fire(MessageReceivedEvent message) throws UserInputException, CommandException, IOException;
 
 	public void saveConfig(JSONObject config) throws IOException {
 		File dst = new File(Bot.CONFIG_FOLDER + "/" + this.getClass().getSimpleName() + ".json");

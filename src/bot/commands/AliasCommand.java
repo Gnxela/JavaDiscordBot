@@ -2,6 +2,7 @@ package bot.commands;
 
 import bot.Bot;
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 import bot.lexer.Lexer;
 import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
@@ -81,7 +82,7 @@ public class AliasCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = -1)
-	private void wildcard(PatternOutput output, MessageReceivedEvent message) throws CommandException, IOException {
+	private void wildcard(PatternOutput output, MessageReceivedEvent message) throws UserInputException, CommandException, IOException {
 		String aliasName = output.getKeys().stream().findFirst().orElse(null);
 		String aliasCommand = (String) aliases.get(aliasName);
 

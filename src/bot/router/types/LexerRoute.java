@@ -2,6 +2,7 @@ package bot.router.types;
 
 import bot.commands.MultiCommand;
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 import bot.lexer.Lexer;
 import bot.lexer.PatternOutput;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -30,14 +31,13 @@ public class LexerRoute extends MessageRoute {
 	}
 
 	@Override
-	public void route(String identifier, MessageReceivedEvent event) throws CommandException, IOException {
+	public void route(String identifier, MessageReceivedEvent event) throws UserInputException, CommandException, IOException {
 		PatternOutput output = lexer.parse(identifier);
 		Method handler = handlerMap.get(output.getId());
 		if (handler == null) {
 			// Check for wildcard handler
 			handler = handlerMap.get(-1);
 			if (handler == null) {
-				// TODO: Seperate user exceptions and bot exceptions (CommandException).
 				throw new CommandException("Handler not found.");
 			}
 		}
@@ -46,7 +46,9 @@ public class LexerRoute extends MessageRoute {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			if (e.getCause() instanceof CommandException) {
+			if (e.getCause() instanceof UserInputException) {
+				throw (UserInputException) e.getCause();
+			} else if (e.getCause() instanceof CommandException) {
 				throw (CommandException) e.getCause();
 			} else if (e.getCause() instanceof IOException) {
 				throw (IOException) e.getCause();

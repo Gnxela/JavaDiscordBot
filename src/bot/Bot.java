@@ -2,6 +2,7 @@ package bot;
 
 import bot.commands.*;
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 import bot.paged.PagedMessageManager;
 import bot.router.Router;
 import net.dv8tion.jda.api.JDA;
@@ -80,9 +81,12 @@ public class Bot extends ListenerAdapter {
 		}
 		try {
 			router.route(event.getMessage().getContentRaw(), event);
-		} catch (CommandException | IOException e) {
-			// TODO: In future we don't want to leak error messages to Discord. But for development this is ok.
+		} catch (UserInputException e) {
 			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": " + e.getMessage()).queue();
+		} catch (CommandException | IOException e) {
+			e.printStackTrace();
+			// TODO: Create a generic method to respond to users, so the format is consistent
+			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": error processing command.").queue();
 		}
 	}
 

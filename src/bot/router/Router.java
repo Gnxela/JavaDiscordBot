@@ -1,6 +1,7 @@
 package bot.router;
 
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Router<T, E> {
 		routes.remove(route);
 	}
 
-	public void route(T identifier, E payload) throws CommandException, IOException {
+	public void route(T identifier, E payload) throws UserInputException, CommandException, IOException {
 		for (Route<T, E> route : routes) {
 			if (route.isRoute(identifier)) {
 				route.route(identifier, payload);
