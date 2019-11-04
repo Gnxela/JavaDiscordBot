@@ -43,7 +43,7 @@ public class AliasCommand extends MultiCommand {
 		aliases.put(newAlias, originalCommand);
 		updateLexer();
 		saveConfig(config);
-		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias added.").queue();
+		MessageUtil.respond(message, "alias added.");
 	}
 
 	@LexerHandler(id = 1)
@@ -52,13 +52,13 @@ public class AliasCommand extends MultiCommand {
 		aliases.remove(alias);
 		updateLexer();
 		saveConfig(config);
-		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " Alias removed.").queue();
+		MessageUtil.respond(message, "alias removed.");
 	}
 
 	@LexerHandler(id = 2)
 	private void list(PatternOutput output, MessageReceivedEvent message) {
 		if (aliases.isEmpty()) {
-			message.getChannel().sendMessage("No aliases set.").queue();
+			MessageUtil.respond(message, "no aliases set.");
 			return;
 		}
 		EmbedBuilder template = new EmbedBuilder().setDescription("Loading...");

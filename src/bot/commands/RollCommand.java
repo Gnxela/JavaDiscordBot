@@ -7,6 +7,7 @@ import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
 import bot.lexer.PatternOutput;
 import bot.router.types.LexerRoute;
+import bot.util.MessageUtil;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class RollCommand extends MultiCommand {
@@ -25,8 +26,7 @@ public class RollCommand extends MultiCommand {
 		int sides = output.getInt("sides");
 		if (sides > 0) {
 			int roll = Bot.RANDOM.nextInt(sides) + 1;
-			String reply = message.getAuthor().getAsMention() + " rolled: " + roll;
-			message.getChannel().sendMessage(reply).queue();
+			MessageUtil.respond(message, "rolled: " + roll);
 		} else {
 			help(output, message);
 		}
@@ -34,6 +34,6 @@ public class RollCommand extends MultiCommand {
 
 	@LexerHandler(id = 1)
 	private void help(PatternOutput output, MessageReceivedEvent message) throws UserInputException {
-		throw new UserInputException("Invalid arguments.");
+		throw new UserInputException("invalid arguments");
 	}
 }

@@ -5,6 +5,7 @@ import bot.exceptions.CommandException;
 import bot.exceptions.UserInputException;
 import bot.paged.PagedMessageManager;
 import bot.router.Router;
+import bot.util.MessageUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -82,11 +83,10 @@ public class Bot extends ListenerAdapter {
 		try {
 			router.route(event.getMessage().getContentRaw(), event);
 		} catch (UserInputException e) {
-			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": " + e.getMessage()).queue();
+			MessageUtil.respond(event.getMessage(), e.getMessage());
 		} catch (CommandException | IOException e) {
 			e.printStackTrace();
-			// TODO: Create a generic method to respond to users, so the format is consistent
-			event.getChannel().sendMessage(event.getAuthor().getAsMention() + ": error processing command.").queue();
+			MessageUtil.respond(event.getMessage(), "error processing command");
 		}
 	}
 

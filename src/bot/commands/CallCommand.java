@@ -2,11 +2,13 @@ package bot.commands;
 
 import bot.Bot;
 import bot.exceptions.CommandException;
+import bot.exceptions.UserInputException;
 import bot.lexer.Lexer;
 import bot.lexer.LexerHandler;
 import bot.lexer.Pattern;
 import bot.lexer.PatternOutput;
 import bot.router.types.LexerRoute;
+import bot.util.MessageUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -30,7 +32,7 @@ public class CallCommand extends MultiCommand {
 		String roleName = output.getString("role");
 		Role calledRoll = message.getGuild().getRoles().stream().filter(role -> role.getName().equalsIgnoreCase(roleName)).findFirst().orElse(null);
 		if (calledRoll == null) {
-			message.getChannel().sendMessage(message.getAuthor().getAsMention() + " role not found.").queue();
+			MessageUtil.respond(message, "role not found.");
 			return;
 		}
 		List<Member> members = message.getGuild().getMembersWithRoles(calledRoll);
@@ -46,7 +48,7 @@ public class CallCommand extends MultiCommand {
 	}
 
 	@LexerHandler(id = 1)
-	private void help(PatternOutput output, MessageReceivedEvent message) {
-		message.getChannel().sendMessage(message.getAuthor().getAsMention() + " invalid arguments.").queue();
+	private void help(PatternOutput output, MessageReceivedEvent message) throws UserInputException {
+		throw new UserInputException("invalid arguments");
 	}
 }
