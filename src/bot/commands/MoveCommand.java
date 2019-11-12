@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MoveCommand extends MultiCommand {
 
@@ -32,15 +33,31 @@ public class MoveCommand extends MultiCommand {
 		// TODO: Permissions checking (here and other places)
 		String from = output.getString("from");
 		String to = output.getString("to");
-		List<GuildChannel> channels = message.getGuild().getChannels();
-		VoiceChannel fromChannel = findChannel(from, channels);
+		List<VoiceChannel> channels = message.getGuild().getChannels().stream()
+				.filter(guildChannel -> guildChannel.getType() == ChannelType.VOICE)
+				.map(VoiceChannel.class::cast)
+				.collect(Collectors.toList());
 		VoiceChannel toChannel = findChannel(to, channels);
+		VoiceChannel fromChannel = findChannel(from, channels);
 		fromChannel.getMembers().forEach(member -> message.getGuild().moveVoiceMember(member, toChannel).queue());
 	}
 
 	@LexerHandler(id = 1)
-	private void moveDest(PatternOutput output, MessageReceivedEvent message) {
-
+	private void moveDest(PatternOutput output, MessageReceivedEvent message) throws UserInputException {
+		String to = output.getString("to");
+		List<VoiceChannel> channels = message.getGuild().getChannels().stream()
+				.filter(guildChannel -> guildChannel.getType() == ChannelType.VOICE)
+				.map(VoiceChannel.class::cast)
+				.collect(Collectors.toList());
+		VoiceChannel fromChannel = channels.stream()
+				.filter(voiceChannel -> voiceChannel.getMembers().contains(message.getMember()))
+				.findFirst()
+				.orElse(null);
+		if (fromChannel == null) {
+			throw new UserInputException("you are not in a voice channel");
+		}
+		VoiceChannel toChannel = findChannel(to, channels);
+		fromChannel.getMembers().forEach(member -> message.getGuild().moveVoiceMember(member, toChannel).queue());
 	}
 
 	@LexerHandler(id = 2)
@@ -48,12 +65,12 @@ public class MoveCommand extends MultiCommand {
 
 	}
 
-	private VoiceChannel findChannel(String name, List<GuildChannel> channels) throws UserInputException {
+	private VoiceChannel findChannel(String name, List<VoiceChannel> channels) throws UserInputException {
 		for (GuildChannel channel : channels) {
-			if (channel.getType() == ChannelType.VOICE && channel.getName().equalsIgnoreCase(name)) {
+			if (channel.getName().equalsIgnoreCase(name)) {
 				return (VoiceChannel) channel;
 			}
 		}
-		throw new UserInputException("Channel not found.");
+		throw new UserInputException("channel not found");
 	}
 }
